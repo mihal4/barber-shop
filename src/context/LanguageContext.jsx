@@ -45,7 +45,7 @@ const translations = {
     // About
     ourStory: "Our Story",
     aboutText1:
-      "Founded in 2010, Gentleman's Cut has been the premier destination for discerning gentlemen who appreciate the art of traditional barbering combined with modern techniques.",
+      "Founded in 2010, Barber shop has been the premier destination for discerning gentlemen who appreciate the art of traditional barbering combined with modern techniques.",
     aboutText2:
       "Our master barbers bring decades of experience and a passion for perfection to every cut. We believe that a great haircut is more than just a service—it's a transformation.",
     premiumProducts: "Premium products only",
@@ -117,7 +117,7 @@ const translations = {
     // About
     ourStory: "Naša história",
     aboutText1:
-      "Od roku 2010 je Gentleman's Cut premierovou destináciou pre pánov, ktorí oceňujú umenie tradičnéholeniu v kombinácii s modernými technikami.",
+      "Od roku 2010 je Barber shop premierovou destináciou pre pánov, ktorí oceňujú umenie tradičnéholeniu v kombinácii s modernými technikami.",
     aboutText2:
       "Naši majstri barberi prinášajú desaťročia skúseností a vášeň k dokonalosti ku každému strihu. Veríme, že skvelý strih je viac než len služba — je to transformácia.",
     premiumProducts: "Len prémiové produkty",

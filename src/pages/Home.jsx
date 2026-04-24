@@ -22,7 +22,7 @@ function Home() {
         <div className="nav-container">
           <div className="nav-logo">
             <span className="logo-icon">✂</span>
-            <span className="logo-text">Gentleman's Cut</span>
+            <span className="logo-text">Barber shop</span>
           </div>
           <ul className="nav-links">
             <li>
@@ -63,7 +63,7 @@ function Home() {
                 href="#contact"
                 onClick={(e) => {
                   e.preventDefault();
-                  scrollToSection("contact");
+                  scrollToSection("address");
                 }}
               >
                 {t("navContact")}
@@ -74,7 +74,15 @@ function Home() {
             <button className="lang-toggle" onClick={toggleLanguage}>
               {language === "en" ? "SK" : "EN"}
             </button>
-            <button className="nav-cta">{t("navBookNow")}</button>
+            <button
+              className="nav-cta"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection("contact");
+              }}
+            >
+              {t("navBookNow")}
+            </button>
           </div>
         </div>
       </nav>
@@ -194,8 +202,8 @@ function Home() {
         </div>
       </section>
 
-      {/* Hours Section */}
-      <section className="hours">
+      {/* Address Section */}
+      <section id="address" className="hours">
         <div className="section-container">
           <div className="hours-grid">
             <div className="hours-card">
@@ -270,9 +278,9 @@ function Home() {
         <div className="footer-content">
           <div className="footer-logo">
             <span className="logo-icon">✂</span>
-            <span>Gentleman's Cut</span>
+            <span>Barber shop</span>
           </div>
-          <p>© 2026 Gentleman's Cut. {t("allRightsReserved")}</p>
+          <p>© 2026 Barber shop. {t("allRightsReserved")}</p>
           <div className="social-links">
             <a href="#">Facebook</a>
             <a href="#">Instagram</a>
