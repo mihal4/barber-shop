@@ -341,17 +341,39 @@ body {
 }
 
 .services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 0.5rem 2rem 1rem;
+  margin: 0 calc(-50vw + 50%);
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--secondary) transparent;
+}
+
+.services-grid::-webkit-scrollbar {
+  height: 4px;
+}
+
+.services-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.services-grid::-webkit-scrollbar-thumb {
+  background: var(--secondary);
+  border-radius: 2px;
 }
 
 .service-card {
+  flex: 0 0 260px;
   background: var(--light);
   padding: 2rem;
   text-align: center;
   transition: all 0.3s;
   border: 1px solid transparent;
+  scroll-snap-align: start;
 }
 
 .service-card:hover {
