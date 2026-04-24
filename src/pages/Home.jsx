@@ -1,11 +1,12 @@
 // src/pages/Home.jsx
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
 import "./Home.css";
 
 function Home() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState("home");
+  const { t, toggleLanguage, language } = useLanguage();
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -32,7 +33,7 @@ function Home() {
                   scrollToSection("home");
                 }}
               >
-                Home
+                {t("navHome")}
               </a>
             </li>
             <li>
@@ -43,7 +44,7 @@ function Home() {
                   scrollToSection("services");
                 }}
               >
-                Services
+                {t("navServices")}
               </a>
             </li>
             <li>
@@ -54,7 +55,7 @@ function Home() {
                   scrollToSection("about");
                 }}
               >
-                About
+                {t("navAbout")}
               </a>
             </li>
             <li>
@@ -65,43 +66,45 @@ function Home() {
                   scrollToSection("contact");
                 }}
               >
-                Contact
+                {t("navContact")}
               </a>
             </li>
           </ul>
-          <button className="nav-cta">Book Now</button>
+          <div className="nav-right">
+            <button className="lang-toggle" onClick={toggleLanguage}>
+              {language === "en" ? "SK" : "EN"}
+            </button>
+            <button className="nav-cta">{t("navBookNow")}</button>
+          </div>
         </div>
       </nav>
 
       {/* Hero Section */}
       <section id="home" className="hero">
         <div className="hero-content">
-          <h1>
-            Classic Cuts.
-            <br />
-            Modern Style.
-          </h1>
-          <p>
-            Where tradition meets sophistication. Experience the art of grooming
-            at its finest.
-          </p>
+          <h1
+            dangerouslySetInnerHTML={{
+              __html: t("heroTitle").replace("\n", "<br/>"),
+            }}
+          />
+          <p>{t("heroSubtitle")}</p>
           <div className="hero-buttons">
-            <button className="btn-primary">Book Appointment</button>
-            <button className="btn-secondary">View Services</button>
+            <button className="btn-primary">{t("heroBookBtn")}</button>
+            <button className="btn-secondary">{t("heroServicesBtn")}</button>
           </div>
         </div>
         <div className="hero-stats">
           <div className="stat">
             <span className="stat-number">15+</span>
-            <span className="stat-label">Years Experience</span>
+            <span className="stat-label">{t("yearsExp")}</span>
           </div>
           <div className="stat">
             <span className="stat-number">10k+</span>
-            <span className="stat-label">Happy Clients</span>
+            <span className="stat-label">{t("happyClients")}</span>
           </div>
           <div className="stat">
             <span className="stat-number">5★</span>
-            <span className="stat-label">Rating</span>
+            <span className="stat-label">{t("rating")}</span>
           </div>
         </div>
       </section>
@@ -109,66 +112,49 @@ function Home() {
       {/* Services Section */}
       <section id="services" className="services">
         <div className="section-container">
-          <h2 className="section-title">Our Services</h2>
-          <p className="section-subtitle">
-            Premium grooming services tailored to your style
-          </p>
+          <h2 className="section-title">{t("ourServices")}</h2>
+          <p className="section-subtitle">{t("servicesSubtitle")}</p>
 
           <div className="services-grid">
             <div className="service-card">
               <div className="service-icon">✂</div>
-              <h3>Haircut</h3>
-              <p>
-                Classic fades, pompadours, and modern styles tailored to your
-                face shape
-              </p>
+              <h3>{t("haircut")}</h3>
+              <p>{t("haircutDesc")}</p>
               <span className="service-price">$35</span>
             </div>
 
             <div className="service-card">
               <div className="service-icon">🪒</div>
-              <h3>Hot Towel Shave</h3>
-              <p>
-                Traditional straight razor shave with warm towels and premium
-                products
-              </p>
+              <h3>{t("hotTowelShave")}</h3>
+              <p>{t("hotTowelShaveDesc")}</p>
               <span className="service-price">$30</span>
             </div>
 
             <div className="service-card">
               <div className="service-icon">💈</div>
-              <h3>Beard Trim</h3>
-              <p>
-                Precision beard shaping and trimming to complement your haircut
-              </p>
+              <h3>{t("beardTrim")}</h3>
+              <p>{t("beardTrimDesc")}</p>
               <span className="service-price">$25</span>
             </div>
 
             <div className="service-card">
               <div className="service-icon">✨</div>
-              <h3>Full Grooming</h3>
-              <p>
-                Complete package: haircut, shave, beard trim, and facial massage
-              </p>
+              <h3>{t("fullGrooming")}</h3>
+              <p>{t("fullGroomingDesc")}</p>
               <span className="service-price">$75</span>
             </div>
 
             <div className="service-card">
               <div className="service-icon">🎨</div>
-              <h3>Hair Coloring</h3>
-              <p>
-                Professional color services including gray coverage and
-                highlights
-              </p>
+              <h3>{t("hairColoring")}</h3>
+              <p>{t("hairColoringDesc")}</p>
               <span className="service-price">$60+</span>
             </div>
 
             <div className="service-card">
               <div className="service-icon">👔</div>
-              <h3>Senior Cut</h3>
-              <p>
-                Classic styles for distinguished gentlemen with discounted rates
-              </p>
+              <h3>{t("seniorCut")}</h3>
+              <p>{t("seniorCutDesc")}</p>
               <span className="service-price">$28</span>
             </div>
           </div>
@@ -180,30 +166,22 @@ function Home() {
         <div className="section-container">
           <div className="about-content">
             <div className="about-text">
-              <h2 className="section-title">Our Story</h2>
-              <p>
-                Founded in 2010, Gentleman's Cut has been the premier
-                destination for discerning gentlemen who appreciate the art of
-                traditional barbering combined with modern techniques.
-              </p>
-              <p>
-                Our master barbers bring decades of experience and a passion for
-                perfection to every cut. We believe that a great haircut is more
-                than just a service—it's a transformation.
-              </p>
+              <h2 className="section-title">{t("ourStory")}</h2>
+              <p>{t("aboutText1")}</p>
+              <p>{t("aboutText2")}</p>
 
               <div className="about-features">
                 <div className="feature">
                   <span className="feature-icon">✓</span>
-                  <span>Premium products only</span>
+                  <span>{t("premiumProducts")}</span>
                 </div>
                 <div className="feature">
                   <span className="feature-icon">✓</span>
-                  <span>Relaxing atmosphere</span>
+                  <span>{t("relaxingAtmosphere")}</span>
                 </div>
                 <div className="feature">
                   <span className="feature-icon">✓</span>
-                  <span>Free consultations</span>
+                  <span>{t("freeConsultations")}</span>
                 </div>
               </div>
             </div>
@@ -221,28 +199,28 @@ function Home() {
         <div className="section-container">
           <div className="hours-grid">
             <div className="hours-card">
-              <h3>Opening Hours</h3>
+              <h3>{t("openingHours")}</h3>
               <ul className="hours-list">
                 <li>
-                  <span>Monday</span>
-                  <span>Closed</span>
+                  <span>{t("monday")}</span>
+                  <span>{t("closed")}</span>
                 </li>
                 <li>
-                  <span>Tuesday - Friday</span>
-                  <span>9:00 AM - 7:00 PM</span>
+                  <span>{t("tuesdayFriday")}</span>
+                  <span>9:00 - 19:00</span>
                 </li>
                 <li>
-                  <span>Saturday</span>
-                  <span>9:00 AM - 5:00 PM</span>
+                  <span>{t("saturday")}</span>
+                  <span>9:00 - 17:00</span>
                 </li>
                 <li>
-                  <span>Sunday</span>
-                  <span>10:00 AM - 4:00 PM</span>
+                  <span>{t("sunday")}</span>
+                  <span>10:00 - 16:00</span>
                 </li>
               </ul>
             </div>
             <div className="hours-card">
-              <h3>Location</h3>
+              <h3>{t("location")}</h3>
               <p>
                 123 Main Street
                 <br />
@@ -259,30 +237,28 @@ function Home() {
       {/* Contact Section */}
       <section id="contact" className="contact">
         <div className="section-container">
-          <h2 className="section-title">Book Your Appointment</h2>
-          <p className="section-subtitle">
-            Walk-ins welcome, appointments recommended
-          </p>
+          <h2 className="section-title">{t("bookAppointment")}</h2>
+          <p className="section-subtitle">{t("contactSubtitle")}</p>
 
           <div className="contact-form">
             <form>
               <div className="form-row">
-                <input type="text" placeholder="Your Name" />
-                <input type="tel" placeholder="Phone Number" />
+                <input type="text" placeholder={t("yourName")} />
+                <input type="tel" placeholder={t("phoneNumber")} />
               </div>
-              <input type="email" placeholder="Email Address" />
+              <input type="email" placeholder={t("emailAddress")} />
               <select>
-                <option value="">Select Service</option>
-                <option value="haircut">Haircut - $35</option>
-                <option value="shave">Hot Towel Shave - $30</option>
-                <option value="beard">Beard Trim - $25</option>
-                <option value="grooming">Full Grooming - $75</option>
-                <option value="coloring">Hair Coloring - $60+</option>
+                <option value="">{t("selectService")}</option>
+                <option value="haircut">{t("haircut")} - $35</option>
+                <option value="shave">{t("hotTowelShave")} - $30</option>
+                <option value="beard">{t("beardTrim")} - $25</option>
+                <option value="grooming">{t("fullGrooming")} - $75</option>
+                <option value="coloring">{t("hairColoring")} - $60+</option>
               </select>
               <input type="date" />
-              <textarea placeholder="Additional notes or special requests"></textarea>
+              <textarea placeholder={t("additionalNotes")}></textarea>
               <button type="submit" className="btn-primary">
-                Request Appointment
+                {t("requestAppointment")}
               </button>
             </form>
           </div>
@@ -296,7 +272,7 @@ function Home() {
             <span className="logo-icon">✂</span>
             <span>Gentleman's Cut</span>
           </div>
-          <p>© 2026 Gentleman's Cut. All rights reserved.</p>
+          <p>© 2026 Gentleman's Cut. {t("allRightsReserved")}</p>
           <div className="social-links">
             <a href="#">Facebook</a>
             <a href="#">Instagram</a>

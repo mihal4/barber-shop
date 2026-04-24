@@ -69,6 +69,28 @@ body {
   gap: 2rem;
 }
 
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.lang-toggle {
+  background: transparent;
+  border: 1px solid var(--white);
+  color: var(--white);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.lang-toggle:hover {
+  background: var(--white);
+  color: var(--primary);
+}
+
 .nav-links a {
   color: var(--white);
   text-decoration: none;
