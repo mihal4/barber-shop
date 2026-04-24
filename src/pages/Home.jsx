@@ -421,6 +421,10 @@ function Home() {
                   <span>{t("saturday")}</span>
                   <span>8:00 - 12:00</span>
                 </li>
+                <li>
+                  <span>{t("sunday")}</span>
+                  <span>{t("closed")}</span>
+                </li>
               </ul>
             </div>
             <div className="hours-card">

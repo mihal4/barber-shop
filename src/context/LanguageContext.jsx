@@ -74,6 +74,8 @@ const translations = {
     openingHours: "Opening Hours",
     mondayFriday: "Monday - Friday",
     saturday: "Saturday",
+    sunday: "Sunday",
+    closed: "Closed",
     location: "Location",
 
     // Contact
@@ -176,6 +178,8 @@ const translations = {
     openingHours: "Otváracie hodiny",
     mondayFriday: "Pondelok - Piatok",
     saturday: "Sobota",
+    sunday: "Nedeľa",
+    closed: "Zatvorené",
     location: "Poloha",
 
     // Contact
