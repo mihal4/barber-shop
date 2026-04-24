@@ -1,5 +1,5 @@
 // src/pages/Home.jsx
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
@@ -25,6 +25,32 @@ function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [errors, setErrors] = useState({});
+
+  const grid1Ref = useRef(null);
+  const grid2Ref = useRef(null);
+  const [activeDot1, setActiveDot1] = useState(0);
+  const [activeDot2, setActiveDot2] = useState(0);
+
+  const makeScrollHandler = (ref, setActive, count) => () => {
+    const el = ref.current;
+    if (!el) return;
+    const index = Math.min(
+      Math.round(
+        (el.scrollLeft / (el.scrollWidth - el.clientWidth)) * (count - 1),
+      ),
+      count - 1,
+    );
+    setActive(isNaN(index) ? 0 : index);
+  };
+
+  const scrollToCard = (ref, index, count) => {
+    const el = ref.current;
+    if (!el) return;
+    el.scrollTo({
+      left: (el.scrollWidth - el.clientWidth) * (index / (count - 1)),
+      behavior: "smooth",
+    });
+  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -243,46 +269,48 @@ function Home() {
 
       {/* Hero Section */}
       <section id="home" className="hero">
-        <div className="hero-content">
-          <h1
-            dangerouslySetInnerHTML={{
-              __html: t("heroTitle").replace("\n", "<br/>"),
-            }}
-          />
-          <p>{t("heroSubtitle")}</p>
-          <div className="hero-buttons">
-            <button
-              className="btn-primary"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection("contact");
+        <div className="hero-inner">
+          <div className="hero-content">
+            <h1
+              dangerouslySetInnerHTML={{
+                __html: t("heroTitle").replace("\n", "<br/>"),
               }}
-            >
-              {t("heroBookBtn")}
-            </button>
-            <button
-              className="btn-secondary"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection("services");
-              }}
-            >
-              {t("heroServicesBtn")}
-            </button>
+            />
+            <p>{t("heroSubtitle")}</p>
+            <div className="hero-buttons">
+              <button
+                className="btn-primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection("contact");
+                }}
+              >
+                {t("heroBookBtn")}
+              </button>
+              <button
+                className="btn-secondary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection("services");
+                }}
+              >
+                {t("heroServicesBtn")}
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="hero-stats">
-          <div className="stat">
-            <span className="stat-number">15+</span>
-            <span className="stat-label">{t("yearsExp")}</span>
-          </div>
-          <div className="stat">
-            <span className="stat-number">10k+</span>
-            <span className="stat-label">{t("happyClients")}</span>
-          </div>
-          <div className="stat">
-            <span className="stat-number">5★</span>
-            <span className="stat-label">{t("rating")}</span>
+          <div className="hero-stats">
+            <div className="stat">
+              <span className="stat-number">15+</span>
+              <span className="stat-label">{t("yearsExp")}</span>
+            </div>
+            <div className="stat">
+              <span className="stat-number">10k+</span>
+              <span className="stat-label">{t("happyClients")}</span>
+            </div>
+            <div className="stat">
+              <span className="stat-number">5★</span>
+              <span className="stat-label">{t("rating")}</span>
+            </div>
           </div>
         </div>
       </section>
@@ -291,9 +319,13 @@ function Home() {
       <section id="services" className="services">
         <div className="section-container">
           <h2 className="section-title">{t("ourServices")}</h2>
-          <p className="section-subtitle">{t("servicesSubtitle")}</p>
+          <p className="section-subtitle">{t("servicesMenSubtitle")}</p>
 
-          <div className="services-grid">
+          <div
+            className="services-grid"
+            ref={grid1Ref}
+            onScroll={makeScrollHandler(grid1Ref, setActiveDot1, 4)}
+          >
             <div className="service-card">
               <div className="service-icon">✂</div>
               <h3>Pánsky strih</h3>
@@ -321,7 +353,27 @@ function Home() {
               <p>popis</p>
               <span className="service-price">10 €</span>
             </div>
+          </div>
 
+          <div className="services-dots">
+            {[0, 1, 2, 3].map((i) => (
+              <button
+                key={i}
+                className={`services-dot ${activeDot1 === i ? "services-dot--active" : ""}`}
+                onClick={() => scrollToCard(grid1Ref, i, 4)}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="section-container">
+          <p className="section-subtitle">{t("servicesWomenSubtitle")}</p>
+
+          <div
+            className="services-grid"
+            ref={grid2Ref}
+            onScroll={makeScrollHandler(grid2Ref, setActiveDot2, 7)}
+          >
             <div className="service-card">
               <div className="service-icon">🎨</div>
               <h3>Strihanie krátkych vlasov</h3>
@@ -371,6 +423,16 @@ function Home() {
               <p>Denná úprava dlhé 25 €</p>
               <span className="service-price">15 €</span>
             </div>
+          </div>
+
+          <div className="services-dots">
+            {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+              <button
+                key={i}
+                className={`services-dot ${activeDot2 === i ? "services-dot--active" : ""}`}
+                onClick={() => scrollToCard(grid2Ref, i, 7)}
+              />
+            ))}
           </div>
         </div>
       </section>
