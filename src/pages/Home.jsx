@@ -180,7 +180,6 @@ function Home() {
                 {isAdmin && (
                   <li>
                     <a
-                      href=""
                       onClick={() => {
                         setMenuOpen(false);
                         navigate("/dashboard");
@@ -192,7 +191,6 @@ function Home() {
                 )}
                 <li>
                   <a
-                    href=""
                     onClick={() => {
                       setMenuOpen(false);
                       navigate("/profile");
@@ -202,17 +200,13 @@ function Home() {
                   </a>
                 </li>
                 <li>
-                  <button className="btn-sign-out" onClick={logout}>
-                    {t("signOut")}
-                  </button>
+                  <a onClick={logout}>{t("signOut")}</a>
                 </li>
               </>
             ) : (
               menuOpen && (
                 <li>
-                  <a href="" onClick={loginWithGoogle}>
-                    {t("signIn")}
-                  </a>
+                  <a onClick={loginWithGoogle}>{t("signIn")}</a>
                 </li>
               )
             )}

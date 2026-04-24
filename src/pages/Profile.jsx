@@ -76,11 +76,11 @@ export default function Profile() {
       <header className="profile-header">
         <div className="profile-header-inner">
           <button className="back-btn" onClick={() => navigate("/")}>
-            ← {t("back")}
+            ← {t("back").toUpperCase()}
           </button>
           <div className="profile-logo">
             <span>✂</span>
-            <span>{t("profile")}</span>
+            <span>{t("profile").toUpperCase()}</span>
           </div>
           <div />
         </div>

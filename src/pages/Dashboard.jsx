@@ -8,6 +8,7 @@ import {
   deleteAppointment,
 } from "../services/appointments";
 import "./Dashboard.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const STATUS = {
   pending: { label: "Pending", cls: "badge-pending" },
@@ -18,6 +19,7 @@ const STATUS = {
 export default function Dashboard() {
   const { user, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,18 +35,18 @@ export default function Dashboard() {
 
     const q = query(
       collection(db, "appointments"),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
     );
 
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
         setAppointments(
-          snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+          snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
         );
         setLoading(false);
       },
-      () => setLoading(false)
+      () => setLoading(false),
     );
 
     return unsubscribe;
@@ -96,21 +98,19 @@ export default function Dashboard() {
       {/* Header */}
       <header className="dash-header">
         <div className="dash-header-inner">
-          <div className="dash-logo">
-            <span>✂</span>
-            <span>Admin Dashboard</span>
-          </div>
+          <button className="back-btn" onClick={() => navigate("/")}>
+            ← {t("back").toUpperCase()}
+          </button>
           <div className="dash-user">
             {user?.photoURL && (
-              <img src={user.photoURL} alt="avatar" className="dash-avatar" referrerPolicy="no-referrer" />
+              <img
+                src={user.photoURL}
+                alt="avatar"
+                className="dash-avatar"
+                referrerPolicy="no-referrer"
+              />
             )}
             <span className="dash-user-email">{user?.email}</span>
-            <button
-              className="dash-logout"
-              onClick={() => logout().then(() => navigate("/"))}
-            >
-              Sign out
-            </button>
           </div>
         </div>
       </header>
