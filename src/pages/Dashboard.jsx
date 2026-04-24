@@ -10,10 +10,10 @@ import {
 import "./Dashboard.css";
 import { useLanguage } from "../context/LanguageContext";
 
-const STATUS = {
-  pending: { label: "Pending", cls: "badge-pending" },
-  confirmed: { label: "Confirmed", cls: "badge-confirmed" },
-  cancelled: { label: "Cancelled", cls: "badge-cancelled" },
+const STATUS_CLS = {
+  pending: "badge-pending",
+  confirmed: "badge-confirmed",
+  cancelled: "badge-cancelled",
 };
 
 export default function Dashboard() {
@@ -120,39 +120,44 @@ export default function Dashboard() {
         <div className="dash-stats">
           <div className="stat-card">
             <span className="stat-value">{stats.total}</span>
-            <span className="stat-label">Total</span>
+            <span className="dashboard-stat-label">{t("dashTotal")}</span>
           </div>
           <div className="stat-card stat-card--pending">
             <span className="stat-value">{stats.pending}</span>
-            <span className="stat-label">Pending</span>
+            <span className="dashboard-stat-label">{t("statusPending")}</span>
           </div>
           <div className="stat-card stat-card--confirmed">
             <span className="stat-value">{stats.confirmed}</span>
-            <span className="stat-label">Confirmed</span>
+            <span className="dashboard-stat-label">{t("statusConfirmed")}</span>
           </div>
           <div className="stat-card stat-card--today">
             <span className="stat-value">{stats.today}</span>
-            <span className="stat-label">Today</span>
+            <span className="dashboard-stat-label">{t("dashToday")}</span>
           </div>
         </div>
 
         {/* Toolbar */}
         <div className="dash-toolbar">
           <div className="dash-filters">
-            {["all", "pending", "confirmed", "cancelled"].map((f) => (
+            {[
+              ["all", t("filterAll")],
+              ["pending", t("statusPending")],
+              ["confirmed", t("statusConfirmed")],
+              ["cancelled", t("statusCancelled")],
+            ].map(([val, label]) => (
               <button
-                key={f}
-                className={`filter-btn ${filter === f ? "filter-btn--active" : ""}`}
-                onClick={() => setFilter(f)}
+                key={val}
+                className={`filter-btn ${filter === val ? "filter-btn--active" : ""}`}
+                onClick={() => setFilter(val)}
               >
-                {f.charAt(0).toUpperCase() + f.slice(1)}
+                {label}
               </button>
             ))}
           </div>
           <input
             className="dash-search"
             type="text"
-            placeholder="Search name, email, phone…"
+            placeholder={t("dashSearch")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -160,23 +165,23 @@ export default function Dashboard() {
 
         {/* Table */}
         {loading ? (
-          <div className="dash-loading">Loading appointments…</div>
+          <div className="dash-loading">{t("loading")}</div>
         ) : filtered.length === 0 ? (
-          <div className="dash-empty">No appointments found.</div>
+          <div className="dash-empty">{t("noAppointmentsFound")}</div>
         ) : (
           <div className="dash-table-wrap">
             <table className="dash-table">
               <thead>
                 <tr>
-                  <th>Date / Time</th>
-                  <th>Submitted</th>
-                  <th>Name</th>
-                  <th>Phone</th>
-                  <th>Email</th>
-                  <th>Service</th>
-                  <th>Notes</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th>{t("dashDatetime")}</th>
+                  <th>{t("submittedOn")}</th>
+                  <th>{t("dashName")}</th>
+                  <th>{t("dashPhone")}</th>
+                  <th>{t("dashEmail")}</th>
+                  <th>{t("dashService")}</th>
+                  <th>{t("dashNotes")}</th>
+                  <th>{t("dashStatus")}</th>
+                  <th>{t("dashActions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -194,9 +199,11 @@ export default function Dashboard() {
                     <td className="td-notes">{a.notes || "—"}</td>
                     <td>
                       <span
-                        className={`badge ${STATUS[a.status]?.cls ?? "badge-pending"}`}
+                        className={`badge ${STATUS_CLS[a.status] ?? "badge-pending"}`}
                       >
-                        {STATUS[a.status]?.label ?? a.status}
+                        {t(
+                          `status${a.status?.charAt(0).toUpperCase()}${a.status?.slice(1)}`,
+                        ) || a.status}
                       </span>
                     </td>
                     <td>
@@ -206,7 +213,7 @@ export default function Dashboard() {
                             className="action-btn action-btn--confirm"
                             onClick={() => handleStatus(a.id, "confirmed")}
                           >
-                            Confirm
+                            {t("dashConfirm")}
                           </button>
                         )}
                         {a.status !== "cancelled" && (
@@ -214,7 +221,7 @@ export default function Dashboard() {
                             className="action-btn action-btn--cancel"
                             onClick={() => handleStatus(a.id, "cancelled")}
                           >
-                            Cancel
+                            {t("dashCancel")}
                           </button>
                         )}
                         {a.status === "cancelled" && (
@@ -222,14 +229,14 @@ export default function Dashboard() {
                             className="action-btn action-btn--restore"
                             onClick={() => handleStatus(a.id, "pending")}
                           >
-                            Restore
+                            {t("dashRestore")}
                           </button>
                         )}
                         <button
                           className="action-btn action-btn--delete"
                           onClick={() => setConfirmDelete(a.id)}
                         >
-                          Delete
+                          {t("dashDelete")}
                         </button>
                       </div>
                     </td>
@@ -245,20 +252,20 @@ export default function Dashboard() {
       {confirmDelete && (
         <div className="modal-overlay" onClick={() => setConfirmDelete(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Delete appointment?</h3>
-            <p>This action cannot be undone.</p>
+            <h3>{t("dashDeleteTitle")}</h3>
+            <p>{t("dashDeleteBody")}</p>
             <div className="modal-actions">
               <button
                 className="action-btn action-btn--delete"
                 onClick={() => handleDelete(confirmDelete)}
               >
-                Delete
+                {t("dashDelete")}
               </button>
               <button
                 className="filter-btn"
                 onClick={() => setConfirmDelete(null)}
               >
-                Cancel
+                {t("dashCancel")}
               </button>
             </div>
           </div>

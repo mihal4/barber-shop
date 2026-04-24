@@ -27,6 +27,25 @@ const translations = {
     statusConfirmed: "Confirmed",
     statusCancelled: "Cancelled",
 
+    // Dashboard
+    dashTotal: "Total",
+    dashToday: "Today",
+    dashSearch: "Search name, email, phone…",
+    dashDatetime: "Date / Time",
+    dashName: "Name",
+    dashPhone: "Phone",
+    dashEmail: "Email",
+    dashService: "Service",
+    dashNotes: "Notes",
+    dashStatus: "Status",
+    dashActions: "Actions",
+    dashConfirm: "Confirm",
+    dashCancel: "Cancel",
+    dashRestore: "Restore",
+    dashDelete: "Delete",
+    dashDeleteTitle: "Delete appointment?",
+    dashDeleteBody: "This action cannot be undone.",
+
     // Hero
     heroTitle: "Classic Cuts.\nModern Style.",
     heroSubtitle:
@@ -109,6 +128,25 @@ const translations = {
     statusPending: "Čakajúce",
     statusConfirmed: "Potvrdené",
     statusCancelled: "Zrušené",
+
+    // Dashboard
+    dashTotal: "Celkom",
+    dashToday: "Dnes",
+    dashSearch: "Hľadať meno, email, telefón…",
+    dashDatetime: "Dátum / Čas",
+    dashName: "Meno",
+    dashPhone: "Telefón",
+    dashEmail: "Email",
+    dashService: "Služba",
+    dashNotes: "Poznámky",
+    dashStatus: "Stav",
+    dashActions: "Akcie",
+    dashConfirm: "Potvrdiť",
+    dashCancel: "Zrušiť",
+    dashRestore: "Obnoviť",
+    dashDelete: "Vymazať",
+    dashDeleteTitle: "Vymazať objednávku?",
+    dashDeleteBody: "Táto akcia sa nedá vrátiť.",
 
     // Hero
     heroTitle: "Klasické strihy.\nModerný štýl.",
