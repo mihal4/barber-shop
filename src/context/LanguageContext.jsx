@@ -88,6 +88,9 @@ const translations = {
 
     // Footer
     allRightsReserved: "All rights reserved.",
+    signInWithGoogle: "Sign in with Google",
+    signedInAs: "Signed in as",
+    signOut: "Sign out",
   },
   sk: {
     // Navigation
@@ -174,6 +177,9 @@ const translations = {
 
     // Footer
     allRightsReserved: "Všetky práva vyhradené.",
+    signInWithGoogle: "Prihlásiť sa cez Google",
+    signedInAs: "Prihlásený ako",
+    signOut: "Odhlásiť sa",
   },
 };
 
