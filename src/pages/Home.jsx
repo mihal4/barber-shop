@@ -97,8 +97,24 @@ function Home() {
           />
           <p>{t("heroSubtitle")}</p>
           <div className="hero-buttons">
-            <button className="btn-primary">{t("heroBookBtn")}</button>
-            <button className="btn-secondary">{t("heroServicesBtn")}</button>
+            <button
+              className="btn-primary"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection("contact");
+              }}
+            >
+              {t("heroBookBtn")}
+            </button>
+            <button
+              className="btn-secondary"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection("services");
+              }}
+            >
+              {t("heroServicesBtn")}
+            </button>
           </div>
         </div>
         <div className="hero-stats">
