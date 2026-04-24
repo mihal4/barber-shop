@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 // TODO: Replace with your Firebase config from Firebase Console
 // Go to Project Settings > Your apps > Web app > Firebase SDK snippet
@@ -23,5 +24,6 @@ const app = initializeApp(firebaseConfig);
 // Export auth and firestore instances
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 
 export default app;

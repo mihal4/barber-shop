@@ -474,6 +474,33 @@
   min-height: 72px;
 }
 
+.product-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+
+.product-thumb--empty {
+  background: #e5e7eb;
+  border-radius: 4px;
+}
+
+.product-image-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.product-image-preview {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .dash-stats {

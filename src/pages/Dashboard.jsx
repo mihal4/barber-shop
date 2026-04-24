@@ -44,6 +44,8 @@ export default function Dashboard() {
   const [productForm, setProductForm] = useState(EMPTY_PRODUCT);
   const [productSaving, setProductSaving] = useState(false);
   const [confirmDeleteProduct, setConfirmDeleteProduct] = useState(null);
+  const [productImageFile, setProductImageFile] = useState(null);
+  const [productImagePreview, setProductImagePreview] = useState(null);
 
   useEffect(() => {
     if (!isAdmin) {
@@ -130,11 +132,22 @@ export default function Dashboard() {
   const openProductModal = (mode, data = EMPTY_PRODUCT) => {
     setProductForm({ ...data });
     setProductModal({ mode, data });
+    setProductImageFile(null);
+    setProductImagePreview(data.imageUrl || null);
   };
 
   const closeProductModal = () => {
     setProductModal(null);
     setProductForm(EMPTY_PRODUCT);
+    setProductImageFile(null);
+    setProductImagePreview(null);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setProductImageFile(file);
+    setProductImagePreview(URL.createObjectURL(file));
   };
 
   const handleProductSave = async () => {
@@ -147,16 +160,17 @@ export default function Dashboard() {
       inStock: productForm.inStock,
     };
     if (productModal.mode === "add") {
-      await addProduct(payload);
+      await addProduct(payload, productImageFile);
     } else {
-      await updateProduct(productModal.data.id, payload);
+      await updateProduct(productModal.data.id, payload, productImageFile, productModal.data.imageUrl);
     }
     setProductSaving(false);
     closeProductModal();
   };
 
   const handleDeleteProduct = async (id) => {
-    await deleteProduct(id);
+    const product = products.find((p) => p.id === id);
+    await deleteProduct(id, product?.imageUrl);
     setConfirmDeleteProduct(null);
   };
 
@@ -358,6 +372,7 @@ export default function Dashboard() {
                 <table className="dash-table">
                   <thead>
                     <tr>
+                      <th></th>
                       <th>{t("productName")}</th>
                       <th>{t("productDescription")}</th>
                       <th>{t("productPrice")}</th>
@@ -369,6 +384,11 @@ export default function Dashboard() {
                   <tbody>
                     {products.map((p) => (
                       <tr key={p.id}>
+                        <td style={{ width: 56, padding: "0.5rem 0.75rem" }}>
+                          {p.imageUrl
+                            ? <img src={p.imageUrl} alt={p.name} className="product-thumb" />
+                            : <div className="product-thumb product-thumb--empty" />}
+                        </td>
                         <td className="td-name">{p.name}</td>
                         <td className="td-notes">{p.description || "—"}</td>
                         <td style={{ whiteSpace: "nowrap" }}>
@@ -461,6 +481,21 @@ export default function Dashboard() {
             <h3>{productModal.mode === "add" ? t("addProduct") : t("editProduct")}</h3>
 
             <div className="product-form">
+              <label className="product-label">
+                {t("productImage")}
+                <div className="product-image-picker">
+                  {productImagePreview && (
+                    <img src={productImagePreview} alt="preview" className="product-image-preview" />
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="product-input"
+                    onChange={handleImageChange}
+                  />
+                </div>
+              </label>
+
               <label className="product-label">
                 {t("productName")}
                 <input
