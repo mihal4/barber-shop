@@ -102,7 +102,7 @@ export default function Dashboard() {
           </div>
           <div className="dash-user">
             {user?.photoURL && (
-              <img src={user.photoURL} alt="avatar" className="dash-avatar" />
+              <img src={user.photoURL} alt="avatar" className="dash-avatar" referrerPolicy="no-referrer" />
             )}
             <span className="dash-user-email">{user?.email}</span>
             <button
