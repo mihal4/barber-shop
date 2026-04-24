@@ -537,7 +537,15 @@
     font-size: 0.85rem;
   }
 
-  .dash-table td:last-child {
+  .dash-table tr {
+    padding-bottom: 0.25rem;
+  }
+
+  .dash-table tr:last-child td {
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .dash-table tr:last-child td:last-child {
     border-bottom: none;
   }
 
