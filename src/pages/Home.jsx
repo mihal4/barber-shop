@@ -486,7 +486,7 @@ function Home() {
                     <h3>{p.name}</h3>
                     {p.description && <p>{p.description}</p>}
                     <span className="service-price">
-                      {p.price != null ? `€${Number(p.price).toFixed(2)}` : ""}
+                      {p.price != null ? `${Number(p.price).toFixed(2)} €` : ""}
                     </span>
                   </div>
                 </div>
