@@ -14,6 +14,19 @@ const translations = {
     signOut: "Sign out",
     back: "Back",
 
+    // Profile page
+    myAppointments: "My Appointments",
+    filterAll: "All",
+    filterUpcoming: "Upcoming",
+    filterPast: "Past",
+    loading: "Loading…",
+    noAppointmentsFound: "No appointments found.",
+    bookNow: "Book now",
+    submittedOn: "Submitted",
+    statusPending: "Pending",
+    statusConfirmed: "Confirmed",
+    statusCancelled: "Cancelled",
+
     // Hero
     heroTitle: "Classic Cuts.\nModern Style.",
     heroSubtitle:
@@ -83,6 +96,19 @@ const translations = {
     signIn: "Prihlásiť sa",
     signOut: "Odhlásiť sa",
     back: "Späť",
+
+    // Profile page
+    myAppointments: "Moje objednávky",
+    filterAll: "Všetky",
+    filterUpcoming: "Nadchádzajúce",
+    filterPast: "Minulé",
+    loading: "Načítavam…",
+    noAppointmentsFound: "Žiadne objednávky.",
+    bookNow: "Objednať sa",
+    submittedOn: "Odoslané",
+    statusPending: "Čakajúce",
+    statusConfirmed: "Potvrdené",
+    statusCancelled: "Zrušené",
 
     // Hero
     heroTitle: "Klasické strihy.\nModerný štýl.",

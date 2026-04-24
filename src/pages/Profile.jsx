@@ -6,10 +6,10 @@ import { useAuth } from "../context/AuthContext";
 import "./Profile.css";
 import { useLanguage } from "../context/LanguageContext";
 
-const STATUS = {
-  pending: { label: "Pending", cls: "badge-pending" },
-  confirmed: { label: "Confirmed", cls: "badge-confirmed" },
-  cancelled: { label: "Cancelled", cls: "badge-cancelled" },
+const STATUS_CLS = {
+  pending: "badge-pending",
+  confirmed: "badge-confirmed",
+  cancelled: "badge-cancelled",
 };
 
 export default function Profile() {
@@ -111,28 +111,32 @@ export default function Profile() {
         {/* Appointments */}
         <section className="appt-section">
           <div className="appt-section-header">
-            <h3 className="appt-title">My Appointments</h3>
+            <h3 className="appt-title">{t("myAppointments")}</h3>
             <div className="appt-filters">
-              {["all", "upcoming", "past"].map((f) => (
+              {[
+                ["all", t("filterAll")],
+                ["upcoming", t("filterUpcoming")],
+                ["past", t("filterPast")],
+              ].map(([val, label]) => (
                 <button
-                  key={f}
-                  className={`filter-pill ${filter === f ? "filter-pill--active" : ""}`}
-                  onClick={() => setFilter(f)}
+                  key={val}
+                  className={`filter-pill ${filter === val ? "filter-pill--active" : ""}`}
+                  onClick={() => setFilter(val)}
                 >
-                  {f.charAt(0).toUpperCase() + f.slice(1)}
+                  {label}
                 </button>
               ))}
             </div>
           </div>
 
           {loading ? (
-            <p className="appt-state">Loading…</p>
+            <p className="appt-state">{t("loading")}</p>
           ) : filtered.length === 0 ? (
             <div className="appt-empty">
               <span className="appt-empty-icon">✂</span>
-              <p>No appointments found.</p>
+              <p>{t("noAppointmentsFound")}</p>
               <button className="btn-book" onClick={() => navigate("/")}>
-                Book now
+                {t("bookNow")}
               </button>
             </div>
           ) : (
@@ -144,16 +148,14 @@ export default function Profile() {
                       <span className="appt-date">{a.date || "—"}</span>
                       {a.time && <span className="appt-time">{a.time}</span>}
                     </div>
-                    <span
-                      className={`badge ${STATUS[a.status]?.cls ?? "badge-pending"}`}
-                    >
-                      {STATUS[a.status]?.label ?? a.status}
+                    <span className={`badge ${STATUS_CLS[a.status] ?? "badge-pending"}`}>
+                      {t(`status${a.status?.charAt(0).toUpperCase()}${a.status?.slice(1)}`) || a.status}
                     </span>
                   </div>
                   <p className="appt-service">{a.service || "—"}</p>
                   {a.notes && <p className="appt-notes">"{a.notes}"</p>}
                   <p className="appt-submitted">
-                    Submitted {formatSubmitted(a.createdAt)}
+                    {t("submittedOn")} {formatSubmitted(a.createdAt)}
                   </p>
                 </div>
               ))}
