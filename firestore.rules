@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow anyone to create appointments
+    match /appointments/{appointment} {
+      allow create: if true;
+      allow read, update, delete: if false;
+    }
+    
+    // For authenticated users - allow read own appointments
+    match /users/{userId} {
+      allow create, read, update, delete: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

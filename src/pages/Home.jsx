@@ -2,16 +2,68 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
+import { createAppointment } from "../services/appointments";
 import "./Home.css";
 
 function Home() {
   const { user } = useAuth();
   const { t, toggleLanguage, language } = useLanguage();
+  
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    service: "",
+    date: "",
+    time: "",
+    notes: "",
+  });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    const result = await createAppointment({
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      service: formData.service,
+      date: formData.date,
+      time: formData.time,
+      notes: formData.notes,
+    });
+
+    setIsSubmitting(false);
+    
+    if (result.success) {
+      setSubmitStatus("success");
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        service: "",
+        date: "",
+        time: "",
+        notes: "",
+      });
+    } else {
+      setSubmitStatus("error");
     }
   };
 
@@ -288,13 +340,39 @@ function Home() {
           <p className="section-subtitle">{t("contactSubtitle")}</p>
 
           <div className="contact-form">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="form-row">
-                <input type="text" placeholder={t("yourName")} />
-                <input type="tel" placeholder={t("phoneNumber")} />
+                <input 
+                  type="text" 
+                  name="name"
+                  placeholder={t("yourName")} 
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required 
+                />
+                <input 
+                  type="tel" 
+                  name="phone"
+                  placeholder={t("phoneNumber")} 
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  required 
+                />
               </div>
-              <input type="email" placeholder={t("emailAddress")} />
-              <select>
+              <input 
+                type="email" 
+                name="email"
+                placeholder={t("emailAddress")} 
+                value={formData.email}
+                onChange={handleInputChange}
+                required 
+              />
+              <select 
+                name="service"
+                value={formData.service}
+                onChange={handleInputChange}
+                required
+              >
                 <option value="">{t("selectService")}</option>
                 <option value="haircut">Pánsky strih: 13 €</option>
                 <option value="shave">Pánsky strih fade: 15 €</option>
@@ -330,10 +408,47 @@ function Home() {
                 </option>
                 <option value="coloring">Denná úprava dlhé vlasy: 25 €</option>
               </select>
-              <input type="date" />
-              <textarea placeholder={t("additionalNotes")}></textarea>
-              <button type="submit" className="btn-primary">
-                {t("requestAppointment")}
+              <div className="form-row">
+                <input 
+                  type="date" 
+                  name="date"
+                  value={formData.date}
+                  onChange={handleInputChange}
+                  required 
+                />
+                <input 
+                  type="time" 
+                  name="time"
+                  value={formData.time}
+                  onChange={handleInputChange}
+                  required 
+                />
+              </div>
+              <textarea 
+                name="notes"
+                placeholder={t("additionalNotes")}
+                value={formData.notes}
+                onChange={handleInputChange}
+              ></textarea>
+              
+              {submitStatus === "success" && (
+                <div className="form-success">
+                  ✓ {t("formSuccess") || "Objednávka bola úspešne odoslaná!"}
+                </div>
+              )}
+              
+              {submitStatus === "error" && (
+                <div className="form-error">
+                  ✗ {t("formError") || "Nastala chyba. Skúste znova."}
+                </div>
+              )}
+              
+              <button 
+                type="submit" 
+                className="btn-primary"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Odosielam..." : t("requestAppointment")}
               </button>
             </form>
           </div>

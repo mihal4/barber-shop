@@ -72,6 +72,8 @@ const translations = {
     selectService: "Select Service",
     additionalNotes: "Additional notes or special requests",
     requestAppointment: "Request Appointment",
+    formSuccess: "Appointment submitted successfully!",
+    formError: "An error occurred. Please try again.",
 
     // Footer
     allRightsReserved: "All rights reserved.",
@@ -145,6 +147,8 @@ const translations = {
     selectService: "Vyberte službu",
     additionalNotes: "Ďalšie poznámky alebo špeciálne požiadavky",
     requestAppointment: "Požiadať o termín",
+    formSuccess: "Objednávka bola úspešne odoslaná!",
+    formError: "Nastala chyba. Skúste znova.",
 
     // Footer
     allRightsReserved: "Všetky práva vyhradené.",
