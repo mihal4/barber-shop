@@ -238,9 +238,11 @@ function Home() {
                     {t("profile")}
                   </a>
                 </li>
-                <li>
-                  <a onClick={logout}>{t("signOut")}</a>
-                </li>
+                {menuOpen && (
+                  <li>
+                    <a onClick={logout}>{t("signOut")}</a>
+                  </li>
+                )}
               </>
             ) : (
               menuOpen && (
@@ -252,9 +254,13 @@ function Home() {
           </ul>
 
           <div className="nav-right">
-            {!user && (
+            {!user ? (
               <button className="nav-cta-secondary" onClick={loginWithGoogle}>
                 {t("signIn")}
+              </button>
+            ) : (
+              <button className="nav-cta-secondary" onClick={logout}>
+                {t("signOut")}
               </button>
             )}
             <button
