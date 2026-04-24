@@ -568,6 +568,7 @@ function Home() {
                     src={user.photoURL}
                     alt="avatar"
                     className="footer-avatar"
+                    referrerPolicy="no-referrer"
                   />
                 )}
                 <span className="footer-user-name">
