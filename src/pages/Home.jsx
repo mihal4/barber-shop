@@ -124,7 +124,6 @@ function Home() {
         <div className="nav-container">
           <div className="nav-logo">
             <span className="logo-icon">✂</span>
-            <span className="logo-text">Barber shop</span>
           </div>
 
           <ul className={`nav-links${menuOpen ? " nav-links--open" : ""}`}>
@@ -177,16 +176,24 @@ function Home() {
               </a>
             </li>
             {user && (
-              <li>
-                <a
-                  onClick={() => {
-                    setMenuOpen(false);
-                    navigate("/profile");
-                  }}
-                >
-                  {t("profile")}
-                </a>
-              </li>
+              <>
+                <li>
+                  <a
+                    href="#profile"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/profile");
+                    }}
+                  >
+                    {t("profile")}
+                  </a>
+                </li>
+                <li>
+                  <a href="#signout" onClick={logout} className="nav-signout">
+                    {t("signOut")}
+                  </a>
+                </li>
+              </>
             )}
           </ul>
 
