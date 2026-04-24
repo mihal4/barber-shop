@@ -7,6 +7,7 @@ Web application for barber shops
 ### v0.1.0 - 2026-04-24
 
 #### Added
+
 - React app with Vite
 - Firebase SDK integration (authentication & Firestore)
 - AuthContext with login/register/logout
@@ -21,6 +22,7 @@ Web application for barber shops
   - Footer with social links
 
 #### Project Structure
+
 ```
 barber-shop/
 ├── src/
@@ -36,6 +38,7 @@ barber-shop/
 ```
 
 #### Deployment
+
 - Live URL: https://barber-shop-c34cb.web.app
 - Deploy: `npm run build && firebase deploy`
 - Auto-deploy on push to master
