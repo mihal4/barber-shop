@@ -7,8 +7,15 @@ import {
   updateAppointmentStatus,
   deleteAppointment,
 } from "../services/appointments";
+import {
+  addProduct,
+  updateProduct,
+  deleteProduct,
+} from "../services/products";
 import "./Dashboard.css";
 import { useLanguage } from "../context/LanguageContext";
+
+const EMPTY_PRODUCT = { name: "", description: "", price: "", category: "", inStock: true };
 
 const STATUS_CLS = {
   pending: "badge-pending",
@@ -21,11 +28,22 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
+  const [activeTab, setActiveTab] = useState("appointments");
+
+  // Appointments state
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(null);
+
+  // Products state
+  const [products, setProducts] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [productModal, setProductModal] = useState(null); // { mode: 'add'|'edit', data: {} }
+  const [productForm, setProductForm] = useState(EMPTY_PRODUCT);
+  const [productSaving, setProductSaving] = useState(false);
+  const [confirmDeleteProduct, setConfirmDeleteProduct] = useState(null);
 
   useEffect(() => {
     if (!isAdmin) {
@@ -51,6 +69,20 @@ export default function Dashboard() {
 
     return unsubscribe;
   }, [isAdmin, navigate]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(
+      q,
+      (snap) => {
+        setProducts(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+        setProductsLoading(false);
+      },
+      () => setProductsLoading(false),
+    );
+    return unsubscribe;
+  }, [isAdmin]);
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -92,6 +124,40 @@ export default function Dashboard() {
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  // Product handlers
+  const openProductModal = (mode, data = EMPTY_PRODUCT) => {
+    setProductForm({ ...data });
+    setProductModal({ mode, data });
+  };
+
+  const closeProductModal = () => {
+    setProductModal(null);
+    setProductForm(EMPTY_PRODUCT);
+  };
+
+  const handleProductSave = async () => {
+    setProductSaving(true);
+    const payload = {
+      name: productForm.name.trim(),
+      description: productForm.description.trim(),
+      price: parseFloat(productForm.price) || 0,
+      category: productForm.category.trim(),
+      inStock: productForm.inStock,
+    };
+    if (productModal.mode === "add") {
+      await addProduct(payload);
+    } else {
+      await updateProduct(productModal.data.id, payload);
+    }
+    setProductSaving(false);
+    closeProductModal();
+  };
+
+  const handleDeleteProduct = async (id) => {
+    await deleteProduct(id);
+    setConfirmDeleteProduct(null);
   };
 
   return (
@@ -137,119 +203,210 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Toolbar */}
-        <div className="dash-toolbar">
-          <div className="dash-filters">
-            {[
-              ["all", t("filterAll")],
-              ["pending", t("statusPending")],
-              ["confirmed", t("statusConfirmed")],
-              ["cancelled", t("statusCancelled")],
-            ].map(([val, label]) => (
-              <button
-                key={val}
-                className={`filter-btn ${filter === val ? "filter-btn--active" : ""}`}
-                onClick={() => setFilter(val)}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-          <input
-            className="dash-search"
-            type="text"
-            placeholder={t("dashSearch")}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+        {/* Tabs */}
+        <div className="dash-tabs">
+          <button
+            className={`dash-tab ${activeTab === "appointments" ? "dash-tab--active" : ""}`}
+            onClick={() => setActiveTab("appointments")}
+          >
+            {t("tabAppointments")}
+          </button>
+          <button
+            className={`dash-tab ${activeTab === "products" ? "dash-tab--active" : ""}`}
+            onClick={() => setActiveTab("products")}
+          >
+            {t("tabProducts")}
+          </button>
         </div>
 
-        {/* Table */}
-        {loading ? (
-          <div className="dash-loading">{t("loading")}</div>
-        ) : filtered.length === 0 ? (
-          <div className="dash-empty">{t("noAppointmentsFound")}</div>
-        ) : (
-          <div className="dash-table-wrap">
-            <table className="dash-table">
-              <thead>
-                <tr>
-                  <th>{t("dashDatetime")}</th>
-                  <th>{t("submittedOn")}</th>
-                  <th>{t("dashName")}</th>
-                  <th>{t("dashPhone")}</th>
-                  <th>{t("dashEmail")}</th>
-                  <th>{t("dashService")}</th>
-                  <th>{t("dashNotes")}</th>
-                  <th>{t("dashStatus")}</th>
-                  <th>{t("dashActions")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((a) => (
-                  <tr key={a.id}>
-                    <td className="td-datetime">
-                      <span className="td-date">{a.date || "—"}</span>
-                      <span className="td-time">{a.time || ""}</span>
-                    </td>
-                    <td className="td-submitted">{formatDate(a.createdAt)}</td>
-                    <td className="td-name">{a.name}</td>
-                    <td>{a.phone}</td>
-                    <td className="td-email">{a.email}</td>
-                    <td className="td-service">{a.service}</td>
-                    <td className="td-notes">{a.notes || "—"}</td>
-                    <td>
-                      <span
-                        className={`badge ${STATUS_CLS[a.status] ?? "badge-pending"}`}
-                      >
-                        {t(
-                          `status${a.status?.charAt(0).toUpperCase()}${a.status?.slice(1)}`,
-                        ) || a.status}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="action-group">
-                        {a.status !== "confirmed" && (
-                          <button
-                            className="action-btn action-btn--confirm"
-                            onClick={() => handleStatus(a.id, "confirmed", a)}
-                          >
-                            {t("dashConfirm")}
-                          </button>
-                        )}
-                        {a.status !== "cancelled" && (
-                          <button
-                            className="action-btn action-btn--cancel"
-                            onClick={() => handleStatus(a.id, "cancelled", a)}
-                          >
-                            {t("dashCancel")}
-                          </button>
-                        )}
-                        {a.status === "cancelled" && (
-                          <button
-                            className="action-btn action-btn--restore"
-                            onClick={() => handleStatus(a.id, "pending", a)}
-                          >
-                            {t("dashRestore")}
-                          </button>
-                        )}
-                        <button
-                          className="action-btn action-btn--delete"
-                          onClick={() => setConfirmDelete(a.id)}
-                        >
-                          {t("dashDelete")}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+        {/* Appointments tab */}
+        {activeTab === "appointments" && (
+          <>
+            {/* Toolbar */}
+            <div className="dash-toolbar">
+              <div className="dash-filters">
+                {[
+                  ["all", t("filterAll")],
+                  ["pending", t("statusPending")],
+                  ["confirmed", t("statusConfirmed")],
+                  ["cancelled", t("statusCancelled")],
+                ].map(([val, label]) => (
+                  <button
+                    key={val}
+                    className={`filter-btn ${filter === val ? "filter-btn--active" : ""}`}
+                    onClick={() => setFilter(val)}
+                  >
+                    {label}
+                  </button>
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </div>
+              <input
+                className="dash-search"
+                type="text"
+                placeholder={t("dashSearch")}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+
+            {/* Table */}
+            {loading ? (
+              <div className="dash-loading">{t("loading")}</div>
+            ) : filtered.length === 0 ? (
+              <div className="dash-empty">{t("noAppointmentsFound")}</div>
+            ) : (
+              <div className="dash-table-wrap">
+                <table className="dash-table">
+                  <thead>
+                    <tr>
+                      <th>{t("dashDatetime")}</th>
+                      <th>{t("submittedOn")}</th>
+                      <th>{t("dashName")}</th>
+                      <th>{t("dashPhone")}</th>
+                      <th>{t("dashEmail")}</th>
+                      <th>{t("dashService")}</th>
+                      <th>{t("dashNotes")}</th>
+                      <th>{t("dashStatus")}</th>
+                      <th>{t("dashActions")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((a) => (
+                      <tr key={a.id}>
+                        <td className="td-datetime">
+                          <span className="td-date">{a.date || "—"}</span>
+                          <span className="td-time">{a.time || ""}</span>
+                        </td>
+                        <td className="td-submitted">{formatDate(a.createdAt)}</td>
+                        <td className="td-name">{a.name}</td>
+                        <td>{a.phone}</td>
+                        <td className="td-email">{a.email}</td>
+                        <td className="td-service">{a.service}</td>
+                        <td className="td-notes">{a.notes || "—"}</td>
+                        <td>
+                          <span
+                            className={`badge ${STATUS_CLS[a.status] ?? "badge-pending"}`}
+                          >
+                            {t(
+                              `status${a.status?.charAt(0).toUpperCase()}${a.status?.slice(1)}`,
+                            ) || a.status}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="action-group">
+                            {a.status !== "confirmed" && (
+                              <button
+                                className="action-btn action-btn--confirm"
+                                onClick={() => handleStatus(a.id, "confirmed", a)}
+                              >
+                                {t("dashConfirm")}
+                              </button>
+                            )}
+                            {a.status !== "cancelled" && (
+                              <button
+                                className="action-btn action-btn--cancel"
+                                onClick={() => handleStatus(a.id, "cancelled", a)}
+                              >
+                                {t("dashCancel")}
+                              </button>
+                            )}
+                            {a.status === "cancelled" && (
+                              <button
+                                className="action-btn action-btn--restore"
+                                onClick={() => handleStatus(a.id, "pending", a)}
+                              >
+                                {t("dashRestore")}
+                              </button>
+                            )}
+                            <button
+                              className="action-btn action-btn--delete"
+                              onClick={() => setConfirmDelete(a.id)}
+                            >
+                              {t("dashDelete")}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Products tab */}
+        {activeTab === "products" && (
+          <>
+            <div className="dash-toolbar">
+              <div />
+              <button
+                className="action-btn action-btn--confirm"
+                style={{ padding: "0.5rem 1.1rem", fontSize: "0.85rem" }}
+                onClick={() => openProductModal("add")}
+              >
+                + {t("addProduct")}
+              </button>
+            </div>
+
+            {productsLoading ? (
+              <div className="dash-loading">{t("loading")}</div>
+            ) : products.length === 0 ? (
+              <div className="dash-empty">{t("noAppointmentsFound")}</div>
+            ) : (
+              <div className="dash-table-wrap">
+                <table className="dash-table">
+                  <thead>
+                    <tr>
+                      <th>{t("productName")}</th>
+                      <th>{t("productDescription")}</th>
+                      <th>{t("productPrice")}</th>
+                      <th>{t("productCategory")}</th>
+                      <th>{t("dashStatus")}</th>
+                      <th>{t("dashActions")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products.map((p) => (
+                      <tr key={p.id}>
+                        <td className="td-name">{p.name}</td>
+                        <td className="td-notes">{p.description || "—"}</td>
+                        <td style={{ whiteSpace: "nowrap" }}>
+                          {p.price != null ? `€${Number(p.price).toFixed(2)}` : "—"}
+                        </td>
+                        <td>{p.category || "—"}</td>
+                        <td>
+                          <span className={`badge ${p.inStock ? "badge-confirmed" : "badge-cancelled"}`}>
+                            {p.inStock ? t("inStock") : t("outOfStock")}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="action-group">
+                            <button
+                              className="action-btn action-btn--restore"
+                              onClick={() => openProductModal("edit", p)}
+                            >
+                              {t("editProduct")}
+                            </button>
+                            <button
+                              className="action-btn action-btn--delete"
+                              onClick={() => setConfirmDeleteProduct(p.id)}
+                            >
+                              {t("dashDelete")}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
         )}
       </main>
 
-      {/* Delete confirm modal */}
+      {/* Delete appointment modal */}
       {confirmDelete && (
         <div className="modal-overlay" onClick={() => setConfirmDelete(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -266,6 +423,106 @@ export default function Dashboard() {
                 className="filter-btn"
                 onClick={() => setConfirmDelete(null)}
               >
+                {t("dashCancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete product modal */}
+      {confirmDeleteProduct && (
+        <div className="modal-overlay" onClick={() => setConfirmDeleteProduct(null)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h3>{t("dashDeleteTitle")}</h3>
+            <p>{t("dashDeleteBody")}</p>
+            <div className="modal-actions">
+              <button
+                className="action-btn action-btn--delete"
+                onClick={() => handleDeleteProduct(confirmDeleteProduct)}
+              >
+                {t("dashDelete")}
+              </button>
+              <button
+                className="filter-btn"
+                onClick={() => setConfirmDeleteProduct(null)}
+              >
+                {t("dashCancel")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add / Edit product modal */}
+      {productModal && (
+        <div className="modal-overlay" onClick={closeProductModal}>
+          <div className="modal modal--product" onClick={(e) => e.stopPropagation()}>
+            <h3>{productModal.mode === "add" ? t("addProduct") : t("editProduct")}</h3>
+
+            <div className="product-form">
+              <label className="product-label">
+                {t("productName")}
+                <input
+                  className="product-input"
+                  type="text"
+                  value={productForm.name}
+                  onChange={(e) => setProductForm((f) => ({ ...f, name: e.target.value }))}
+                />
+              </label>
+
+              <label className="product-label">
+                {t("productDescription")}
+                <textarea
+                  className="product-input product-textarea"
+                  value={productForm.description}
+                  onChange={(e) => setProductForm((f) => ({ ...f, description: e.target.value }))}
+                />
+              </label>
+
+              <div className="product-form-row">
+                <label className="product-label">
+                  {t("productPrice")}
+                  <input
+                    className="product-input"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={productForm.price}
+                    onChange={(e) => setProductForm((f) => ({ ...f, price: e.target.value }))}
+                  />
+                </label>
+
+                <label className="product-label">
+                  {t("productCategory")}
+                  <input
+                    className="product-input"
+                    type="text"
+                    value={productForm.category}
+                    onChange={(e) => setProductForm((f) => ({ ...f, category: e.target.value }))}
+                  />
+                </label>
+              </div>
+
+              <label className="product-label product-label--checkbox">
+                <input
+                  type="checkbox"
+                  checked={productForm.inStock}
+                  onChange={(e) => setProductForm((f) => ({ ...f, inStock: e.target.checked }))}
+                />
+                {t("inStock")}
+              </label>
+            </div>
+
+            <div className="modal-actions">
+              <button
+                className="action-btn action-btn--confirm"
+                onClick={handleProductSave}
+                disabled={productSaving || !productForm.name.trim()}
+              >
+                {t("save")}
+              </button>
+              <button className="filter-btn" onClick={closeProductModal}>
                 {t("dashCancel")}
               </button>
             </div>

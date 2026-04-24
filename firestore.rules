@@ -19,6 +19,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Products are publicly readable; only admins can write
+    match /products/{product} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     match /users/{userId} {
       allow create, read, update, delete: if request.auth != null && request.auth.uid == userId;
     }
