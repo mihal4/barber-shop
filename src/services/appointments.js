@@ -1,12 +1,15 @@
 // src/services/appointments.js
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  query, 
-  where, 
-  orderBy, 
-  serverTimestamp 
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  serverTimestamp,
+  updateDoc,
+  deleteDoc,
+  doc,
 } from 'firebase/firestore'
 import { db } from '../firebase/config'
 
@@ -39,6 +42,28 @@ export const getAppointments = async () => {
     }
   } catch (error) {
     console.error('Error fetching appointments:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+// Update appointment status
+export const updateAppointmentStatus = async (id, status) => {
+  try {
+    await updateDoc(doc(db, 'appointments', id), { status })
+    return { success: true }
+  } catch (error) {
+    console.error('Error updating appointment:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+// Delete appointment
+export const deleteAppointment = async (id) => {
+  try {
+    await deleteDoc(doc(db, 'appointments', id))
+    return { success: true }
+  } catch (error) {
+    console.error('Error deleting appointment:', error)
     return { success: false, error: error.message }
   }
 }

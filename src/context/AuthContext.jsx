@@ -10,6 +10,8 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import { auth } from "../firebase/config";
+import { db } from "../firebase/config";
+import { doc, getDoc } from "firebase/firestore";
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -21,11 +23,18 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setUser(firebaseUser);
+      if (firebaseUser) {
+        const snap = await getDoc(doc(db, "admins", firebaseUser.uid));
+        setIsAdmin(snap.exists());
+      } else {
+        setIsAdmin(false);
+      }
       setLoading(false);
     });
 
@@ -57,6 +66,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     user,
+    isAdmin,
     loading,
     login,
     register,

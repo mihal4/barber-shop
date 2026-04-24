@@ -1,5 +1,6 @@
 // src/pages/Home.jsx
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import { createAppointment } from "../services/appointments";
@@ -7,6 +8,7 @@ import "./Home.css";
 
 function Home() {
   const { user, loginWithGoogle, logout } = useAuth();
+  const navigate = useNavigate();
   const { t, toggleLanguage, language } = useLanguage();
 
   const [formData, setFormData] = useState({
@@ -554,6 +556,13 @@ function Home() {
           <div className="footer-auth">
             {user ? (
               <div className="footer-user">
+                <button
+                  className="btn-sign-out"
+                  onClick={() => navigate("/dashboard")}
+                  style={{ borderColor: "rgba(201,162,39,0.6)", color: "#c9a227" }}
+                >
+                  Dashboard
+                </button>
                 {user.photoURL && (
                   <img
                     src={user.photoURL}
