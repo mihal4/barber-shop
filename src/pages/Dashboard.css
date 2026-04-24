@@ -155,7 +155,8 @@
   color: #1a1a1a;
 }
 
-.filter-btn--active {
+.filter-btn--active,
+.filter-btn--active:hover {
   background: #1a1a1a;
   border-color: #1a1a1a;
   color: #c9a227;
