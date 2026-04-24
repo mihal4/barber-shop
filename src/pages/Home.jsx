@@ -210,9 +210,7 @@ function Home() {
               </div>
             </div>
             <div className="about-image">
-              <div className="placeholder-image">
-                <span>Barber Shop Image</span>
-              </div>
+              <div className="placeholder-image" />
             </div>
           </div>
         </div>
@@ -226,33 +224,25 @@ function Home() {
               <h3>{t("openingHours")}</h3>
               <ul className="hours-list">
                 <li>
-                  <span>{t("monday")}</span>
-                  <span>{t("closed")}</span>
-                </li>
-                <li>
-                  <span>{t("tuesdayFriday")}</span>
-                  <span>9:00 - 19:00</span>
+                  <span>{t("mondayFriday")}</span>
+                  <span>9:00 - 16:00</span>
                 </li>
                 <li>
                   <span>{t("saturday")}</span>
-                  <span>9:00 - 17:00</span>
-                </li>
-                <li>
-                  <span>{t("sunday")}</span>
-                  <span>10:00 - 16:00</span>
+                  <span>8:00 - 12:00</span>
                 </li>
               </ul>
             </div>
             <div className="hours-card">
               <h3>{t("location")}</h3>
               <p>
-                123 Main Street
+                Letná 51 (v bráne)
                 <br />
-                Downtown District
+                Spišská Nová Ves
                 <br />
-                City, State 12345
+                05201
               </p>
-              <p className="phone">📞 (555) 123-4567</p>
+              <p className="phone">📞 (+421) 949 727 574</p>
             </div>
           </div>
         </div>

@@ -55,6 +55,7 @@ const translations = {
     // Hours
     openingHours: "Opening Hours",
     monday: "Monday",
+    mondayFriday: "Monday - Friday",
     tuesdayFriday: "Tuesday - Friday",
     saturday: "Saturday",
     sunday: "Sunday",
@@ -127,6 +128,7 @@ const translations = {
     // Hours
     openingHours: "Otváracie hodiny",
     monday: "Pondelok",
+    mondayFriday: "Pondelok - Piatok",
     tuesdayFriday: "Utorok - Piatok",
     saturday: "Sobota",
     sunday: "Nedeľa",
