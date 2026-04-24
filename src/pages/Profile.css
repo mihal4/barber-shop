@@ -1,0 +1,307 @@
+/* Profile page */
+.profile-page {
+  min-height: 100vh;
+  background: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Header */
+.profile-header {
+  background: #1a1a1a;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.profile-header-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profile-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #c9a227;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.back-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.3rem 0;
+  transition: color 0.2s;
+}
+
+.back-btn:hover {
+  color: #fff;
+}
+
+.profile-logout {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  border-radius: 4px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+
+.profile-logout:hover {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Main */
+.profile-main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* User card */
+.user-card {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.user-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #c9a227;
+  flex-shrink: 0;
+}
+
+.user-avatar-placeholder {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #c9a227;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.user-name {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  font-family: Georgia, serif;
+}
+
+.user-email {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.9rem;
+}
+
+/* Appointments section */
+.appt-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.appt-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.appt-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: Georgia, serif;
+}
+
+.appt-filters {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.filter-pill {
+  background: #f0f0f0;
+  border: none;
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #555;
+  transition: all 0.15s;
+}
+
+.filter-pill:hover {
+  background: #e0e0e0;
+}
+
+.filter-pill--active {
+  background: #1a1a1a;
+  color: #c9a227;
+}
+
+/* States */
+.appt-state {
+  color: #888;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.appt-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 0;
+  color: #888;
+}
+
+.appt-empty-icon {
+  font-size: 2.5rem;
+  opacity: 0.3;
+}
+
+.btn-book {
+  margin-top: 0.5rem;
+  background: #c9a227;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-book:hover {
+  opacity: 0.85;
+}
+
+/* Appointment cards */
+.appt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.appt-card {
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid #ccc;
+  transition: box-shadow 0.15s;
+}
+
+.appt-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.appt-card--pending   { border-left-color: #f59e0b; }
+.appt-card--confirmed { border-left-color: #10b981; }
+.appt-card--cancelled { border-left-color: #ef4444; opacity: 0.7; }
+
+.appt-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.appt-datetime {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.appt-date {
+  font-weight: 700;
+  color: #1a1a1a;
+  font-size: 0.95rem;
+}
+
+.appt-time {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.appt-service {
+  color: #333;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.appt-notes {
+  color: #777;
+  font-size: 0.82rem;
+  font-style: italic;
+  margin-bottom: 0.3rem;
+}
+
+.appt-submitted {
+  color: #bbb;
+  font-size: 0.75rem;
+  margin-top: 0.4rem;
+}
+
+/* Badges (shared style) */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-pending   { background: #fef3c7; color: #92400e; }
+.badge-confirmed { background: #d1fae5; color: #065f46; }
+.badge-cancelled { background: #fee2e2; color: #991b1b; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .profile-main {
+    padding: 1rem;
+  }
+
+  .user-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .appt-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

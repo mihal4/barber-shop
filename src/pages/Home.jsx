@@ -7,7 +7,7 @@ import { createAppointment } from "../services/appointments";
 import "./Home.css";
 
 function Home() {
-  const { user, loginWithGoogle, logout } = useAuth();
+  const { user, isAdmin, loginWithGoogle, logout } = useAuth();
   const navigate = useNavigate();
   const { t, toggleLanguage, language } = useLanguage();
 
@@ -21,6 +21,7 @@ function Home() {
     notes: "",
   });
 
+  const [menuOpen, setMenuOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
   const [errors, setErrors] = useState({});
@@ -125,13 +126,15 @@ function Home() {
             <span className="logo-icon">✂</span>
             <span className="logo-text">Barber shop</span>
           </div>
-          <ul className="nav-links">
+
+          <ul className={`nav-links${menuOpen ? " nav-links--open" : ""}`}>
             <li>
               <a
                 href="#home"
                 onClick={(e) => {
                   e.preventDefault();
                   scrollToSection("home");
+                  setMenuOpen(false);
                 }}
               >
                 {t("navHome")}
@@ -143,6 +146,7 @@ function Home() {
                 onClick={(e) => {
                   e.preventDefault();
                   scrollToSection("services");
+                  setMenuOpen(false);
                 }}
               >
                 {t("navServices")}
@@ -154,6 +158,7 @@ function Home() {
                 onClick={(e) => {
                   e.preventDefault();
                   scrollToSection("about");
+                  setMenuOpen(false);
                 }}
               >
                 {t("navAbout")}
@@ -165,21 +170,45 @@ function Home() {
                 onClick={(e) => {
                   e.preventDefault();
                   scrollToSection("address");
+                  setMenuOpen(false);
                 }}
               >
                 {t("navContact")}
               </a>
             </li>
+            {user && (
+              <li>
+                <a
+                  onClick={() => {
+                    setMenuOpen(false);
+                    navigate("/profile");
+                  }}
+                >
+                  {t("profile")}
+                </a>
+              </li>
+            )}
           </ul>
+
           <div className="nav-right">
             <button
               className="nav-cta"
               onClick={(e) => {
                 e.preventDefault();
+                setMenuOpen(false);
                 scrollToSection("contact");
               }}
             >
               {t("navBookNow")}
+            </button>
+            <button
+              className={`hamburger${menuOpen ? " hamburger--open" : ""}`}
+              onClick={() => setMenuOpen((prev) => !prev)}
+              aria-label="Toggle menu"
+            >
+              <span />
+              <span />
+              <span />
             </button>
           </div>
         </div>
@@ -556,13 +585,18 @@ function Home() {
           <div className="footer-auth">
             {user ? (
               <div className="footer-user">
-                <button
-                  className="btn-sign-out"
-                  onClick={() => navigate("/dashboard")}
-                  style={{ borderColor: "rgba(201,162,39,0.6)", color: "#c9a227" }}
-                >
-                  Dashboard
-                </button>
+                {isAdmin && (
+                  <button
+                    className="btn-sign-out"
+                    onClick={() => navigate("/dashboard")}
+                    style={{
+                      borderColor: "rgba(201,162,39,0.6)",
+                      color: "#c9a227",
+                    }}
+                  >
+                    Dashboard
+                  </button>
+                )}
                 {user.photoURL && (
                   <img
                     src={user.photoURL}
@@ -580,7 +614,11 @@ function Home() {
               </div>
             ) : (
               <button className="btn-google" onClick={loginWithGoogle}>
-                <svg className="google-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <svg
+                  className="google-icon"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
                   <path
                     fill="#4285F4"
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
