@@ -1,6 +1,8 @@
 // src/pages/Home.jsx
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase/config";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import { createAppointment } from "../services/appointments";
@@ -28,8 +30,19 @@ function Home() {
 
   const grid1Ref = useRef(null);
   const grid2Ref = useRef(null);
+  const grid3Ref = useRef(null);
   const [activeDot1, setActiveDot1] = useState(0);
   const [activeDot2, setActiveDot2] = useState(0);
+  const [activeDot3, setActiveDot3] = useState(0);
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+    return onSnapshot(q, (snap) =>
+      setProducts(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    );
+  }, []);
 
   const makeScrollHandler = (ref, setActive, count) => () => {
     const el = ref.current;
@@ -436,6 +449,50 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* Products Section */}
+      {products.length > 0 && (
+        <section id="products" className="products-section">
+          <div className="section-container">
+            <h2 className="section-title">{t("ourProducts")}</h2>
+            <p className="section-subtitle">{t("ourProductsSubtitle")}</p>
+
+            <div
+              className="services-grid"
+              ref={grid3Ref}
+              onScroll={makeScrollHandler(grid3Ref, setActiveDot3, products.length)}
+            >
+              {products.map((p) => (
+                <div key={p.id} className="product-card">
+                  {p.imageUrl
+                    ? <img src={p.imageUrl} alt={p.name} className="product-card-img" />
+                    : <div className="product-card-img product-card-img--empty" />}
+                  <div className="product-card-body">
+                    {p.category && <span className="product-card-category">{p.category}</span>}
+                    <h3>{p.name}</h3>
+                    {p.description && <p>{p.description}</p>}
+                    <span className="service-price">
+                      {p.price != null ? `€${Number(p.price).toFixed(2)}` : ""}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {products.length > 1 && (
+              <div className="services-dots">
+                {products.map((_, i) => (
+                  <button
+                    key={i}
+                    className={`services-dot ${activeDot3 === i ? "services-dot--active" : ""}`}
+                    onClick={() => scrollToCard(grid3Ref, i, products.length)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* About Section */}
       <section id="about" className="about">

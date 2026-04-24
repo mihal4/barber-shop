@@ -74,6 +74,10 @@ const translations = {
     servicesWomenSubtitle:
       "Premium woman grooming services tailored to your style",
 
+    // Products
+    ourProducts: "Our Products",
+    ourProductsSubtitle: "Premium products available in our salon",
+
     // About
     ourStory: "Our Story",
     aboutText1:
@@ -190,6 +194,10 @@ const translations = {
     ourServices: "Naše služby",
     servicesMenSubtitle: "Prémiové pánske služby prispôsobené vášmu štýlu",
     servicesWomenSubtitle: "Prémiové dámske služby prispôsobené vášmu štýlu",
+
+    // Products
+    ourProducts: "Naše produkty",
+    ourProductsSubtitle: "Prémiové produkty dostupné v našom salóne",
 
     // About
     ourStory: "Naša história",
