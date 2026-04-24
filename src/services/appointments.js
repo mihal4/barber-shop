@@ -12,6 +12,7 @@ import {
   doc,
 } from 'firebase/firestore'
 import { db } from '../firebase/config'
+import { notifyAdminNewAppointment } from './email'
 
 // Create a new appointment
 export const createAppointment = async (appointmentData) => {
@@ -21,6 +22,8 @@ export const createAppointment = async (appointmentData) => {
       status: 'pending',
       createdAt: serverTimestamp(),
     })
+    // Fire-and-forget — email failure must not break the booking
+    notifyAdminNewAppointment(appointmentData).catch(console.error)
     return { success: true, id: docRef.id }
   } catch (error) {
     console.error('Error creating appointment:', error)
