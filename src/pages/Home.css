@@ -1,0 +1,62 @@
+/* src/pages/Home.css */
+.home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-header {
+  background-color: #1a1a1a;
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.home-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.home-header p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.home-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hero {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.hero h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.user-info,
+.auth-prompt {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+}
+
+.auth-prompt {
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+}
