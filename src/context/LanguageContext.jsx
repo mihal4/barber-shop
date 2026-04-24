@@ -156,7 +156,7 @@ export function useLanguage() {
 }
 
 export function LanguageProvider({ children }) {
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState("sk");
 
   const t = (key) => {
     return translations[language][key] || translations.en[key] || key;
