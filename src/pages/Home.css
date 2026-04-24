@@ -115,7 +115,9 @@ body {
   border-radius: 999px;
   font-size: 0.82rem;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
   white-space: nowrap;
 }
 
@@ -166,22 +168,42 @@ body {
   transition: all 0.3s;
 }
 
+.nav-cta-secondary {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--white);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
 .nav-cta:hover {
   background: #d4af37;
+}
+
+.nav-cta-secondary:hover {
+  background: var(--white);
+  color: var(--primary);
 }
 
 .nav-signout {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.35);
   color: var(--white);
-  padding: 0.5rem 1rem;
-  font-size: 0.8rem;
-  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   cursor: pointer;
   opacity: 0.75;
-  transition: opacity 0.2s, border-color 0.2s;
+  transition:
+    opacity 0.2s,
+    border-color 0.2s;
 }
 
 .nav-signout:hover {
@@ -609,7 +631,9 @@ body {
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: box-shadow 0.2s, background 0.2s;
+  transition:
+    box-shadow 0.2s,
+    background 0.2s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
@@ -655,7 +679,9 @@ body {
   font-size: 0.8rem;
   cursor: pointer;
   opacity: 0.75;
-  transition: opacity 0.2s, border-color 0.2s;
+  transition:
+    opacity 0.2s,
+    border-color 0.2s;
 }
 
 .btn-sign-out:hover {
@@ -683,7 +709,9 @@ body {
   height: 2px;
   background: var(--white);
   border-radius: 2px;
-  transition: transform 0.25s ease, opacity 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
   transform-origin: center;
 }
 
@@ -758,6 +786,10 @@ body {
 
   .form-row {
     grid-template-columns: 1fr;
+  }
+
+  .nav-cta-secondary {
+    display: none;
   }
 }
 

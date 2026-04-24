@@ -1,12 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "../firebase/config";
 import { useAuth } from "../context/AuthContext";
 import "./Profile.css";
+import { useLanguage } from "../context/LanguageContext";
 
 const STATUS = {
-  pending:   { label: "Pending",   cls: "badge-pending" },
+  pending: { label: "Pending", cls: "badge-pending" },
   confirmed: { label: "Confirmed", cls: "badge-confirmed" },
   cancelled: { label: "Cancelled", cls: "badge-cancelled" },
 };
@@ -14,6 +21,7 @@ const STATUS = {
 export default function Profile() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +36,7 @@ export default function Profile() {
     const q = query(
       collection(db, "appointments"),
       where("email", "==", user.email),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
     );
 
     const unsubscribe = onSnapshot(
@@ -37,7 +45,7 @@ export default function Profile() {
         setAppointments(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
         setLoading(false);
       },
-      () => setLoading(false)
+      () => setLoading(false),
     );
 
     return unsubscribe;
@@ -46,8 +54,9 @@ export default function Profile() {
   const today = new Date().toISOString().split("T")[0];
 
   const filtered = appointments.filter((a) => {
-    if (filter === "upcoming") return a.date >= today && a.status !== "cancelled";
-    if (filter === "past")     return a.date < today;
+    if (filter === "upcoming")
+      return a.date >= today && a.status !== "cancelled";
+    if (filter === "past") return a.date < today;
     return true;
   });
 
@@ -55,7 +64,9 @@ export default function Profile() {
     if (!ts) return "";
     const d = ts.toDate ? ts.toDate() : new Date(ts);
     return d.toLocaleDateString("sk-SK", {
-      day: "2-digit", month: "2-digit", year: "numeric",
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
     });
   };
 
@@ -65,18 +76,13 @@ export default function Profile() {
       <header className="profile-header">
         <div className="profile-header-inner">
           <button className="back-btn" onClick={() => navigate("/")}>
-            ← Back
+            ← {t("back")}
           </button>
           <div className="profile-logo">
             <span>✂</span>
-            <span>Barber shop</span>
+            <span>{t("profile")}</span>
           </div>
-          <button
-            className="profile-logout"
-            onClick={() => logout().then(() => navigate("/"))}
-          >
-            Sign out
-          </button>
+          <div />
         </div>
       </header>
 
@@ -139,7 +145,9 @@ export default function Profile() {
                       <span className="appt-date">{a.date || "—"}</span>
                       {a.time && <span className="appt-time">{a.time}</span>}
                     </div>
-                    <span className={`badge ${STATUS[a.status]?.cls ?? "badge-pending"}`}>
+                    <span
+                      className={`badge ${STATUS[a.status]?.cls ?? "badge-pending"}`}
+                    >
                       {STATUS[a.status]?.label ?? a.status}
                     </span>
                   </div>
