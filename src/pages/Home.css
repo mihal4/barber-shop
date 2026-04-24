@@ -34,7 +34,6 @@ body {
   background: rgba(26, 26, 26, 0.95);
   backdrop-filter: blur(10px);
   z-index: 1000;
-  padding: 1rem 0;
 }
 
 .navbar a:hover {
@@ -45,6 +44,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
