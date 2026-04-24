@@ -210,7 +210,7 @@ function Home() {
             ) : (
               menuOpen && (
                 <li>
-                  <a href="" onClick={logout}>
+                  <a href="" onClick={loginWithGoogle}>
                     {t("signIn")}
                   </a>
                 </li>
