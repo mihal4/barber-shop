@@ -74,7 +74,8 @@ export default function Dashboard() {
     return true;
   });
 
-  const handleStatus = (id, status) => updateAppointmentStatus(id, status);
+  const handleStatus = (id, status, appointment) =>
+    updateAppointmentStatus(id, status, appointment);
 
   const handleDelete = async (id) => {
     await deleteAppointment(id);
@@ -211,7 +212,7 @@ export default function Dashboard() {
                         {a.status !== "confirmed" && (
                           <button
                             className="action-btn action-btn--confirm"
-                            onClick={() => handleStatus(a.id, "confirmed")}
+                            onClick={() => handleStatus(a.id, "confirmed", a)}
                           >
                             {t("dashConfirm")}
                           </button>
@@ -219,7 +220,7 @@ export default function Dashboard() {
                         {a.status !== "cancelled" && (
                           <button
                             className="action-btn action-btn--cancel"
-                            onClick={() => handleStatus(a.id, "cancelled")}
+                            onClick={() => handleStatus(a.id, "cancelled", a)}
                           >
                             {t("dashCancel")}
                           </button>
@@ -227,7 +228,7 @@ export default function Dashboard() {
                         {a.status === "cancelled" && (
                           <button
                             className="action-btn action-btn--restore"
-                            onClick={() => handleStatus(a.id, "pending")}
+                            onClick={() => handleStatus(a.id, "pending", a)}
                           >
                             {t("dashRestore")}
                           </button>
