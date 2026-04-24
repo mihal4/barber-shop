@@ -419,14 +419,14 @@ function Home() {
               <div className="service-icon">👔</div>
               <h3>Boxerské vrkoče</h3>
               <p>popis</p>
-              <span className="service-price">20 -30 €</span>
+              <span className="service-price">20 - 30 €</span>
             </div>
 
             <div className="service-card">
               <div className="service-icon">👔</div>
               <h3>Účesy</h3>
               <p>popis</p>
-              <span className="service-price">25 -35 €</span>
+              <span className="service-price">25 - 35 €</span>
             </div>
 
             <div className="service-card">
@@ -460,15 +460,29 @@ function Home() {
             <div
               className="services-grid"
               ref={grid3Ref}
-              onScroll={makeScrollHandler(grid3Ref, setActiveDot3, products.length)}
+              onScroll={makeScrollHandler(
+                grid3Ref,
+                setActiveDot3,
+                products.length,
+              )}
             >
               {products.map((p) => (
                 <div key={p.id} className="product-card">
-                  {p.imageUrl
-                    ? <img src={p.imageUrl} alt={p.name} className="product-card-img" />
-                    : <div className="product-card-img product-card-img--empty" />}
+                  {p.imageUrl ? (
+                    <img
+                      src={p.imageUrl}
+                      alt={p.name}
+                      className="product-card-img"
+                    />
+                  ) : (
+                    <div className="product-card-img product-card-img--empty" />
+                  )}
                   <div className="product-card-body">
-                    {p.category && <span className="product-card-category">{p.category}</span>}
+                    {p.category && (
+                      <span className="product-card-category">
+                        {p.category}
+                      </span>
+                    )}
                     <h3>{p.name}</h3>
                     {p.description && <p>{p.description}</p>}
                     <span className="service-price">
