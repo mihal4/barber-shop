@@ -75,6 +75,17 @@ const translations = {
     formSuccess: "Appointment submitted successfully!",
     formError: "An error occurred. Please try again.",
 
+    // Validation
+    validationNameRequired: "Name is required",
+    validationNameMin: "Name must be at least 2 characters",
+    validationPhoneRequired: "Phone number is required",
+    validationPhoneInvalid: "Please enter a valid phone number",
+    validationEmailRequired: "Email is required",
+    validationEmailInvalid: "Please enter a valid email address",
+    validationServiceRequired: "Please select a service",
+    validationDateRequired: "Please select a date",
+    validationTimeRequired: "Please select a time",
+
     // Footer
     allRightsReserved: "All rights reserved.",
   },
@@ -149,6 +160,17 @@ const translations = {
     requestAppointment: "Požiadať o termín",
     formSuccess: "Objednávka bola úspešne odoslaná!",
     formError: "Nastala chyba. Skúste znova.",
+
+    // Validation
+    validationNameRequired: "Meno je povinné",
+    validationNameMin: "Meno musí mať aspoň 2 znaky",
+    validationPhoneRequired: "Telefónne číslo je povinné",
+    validationPhoneInvalid: "Zadajte platné telefónne číslo",
+    validationEmailRequired: "Email je povinný",
+    validationEmailInvalid: "Zadajte platnú emailovú adresu",
+    validationServiceRequired: "Vyberte službu",
+    validationDateRequired: "Vyberte dátum",
+    validationTimeRequired: "Vyberte čas",
 
     // Footer
     allRightsReserved: "Všetky práva vyhradené.",

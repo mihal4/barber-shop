@@ -8,7 +8,7 @@ import "./Home.css";
 function Home() {
   const { user } = useAuth();
   const { t, toggleLanguage, language } = useLanguage();
-  
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -18,9 +18,47 @@ function Home() {
     time: "",
     notes: "",
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = t("validationNameRequired");
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = t("validationNameMin");
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = t("validationPhoneRequired");
+    } else if (!/^[\d\s\+\-\(\)]{9,}$/.test(formData.phone.trim())) {
+      newErrors.phone = t("validationPhoneInvalid");
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = t("validationEmailRequired");
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = t("validationEmailInvalid");
+    }
+
+    if (!formData.service) {
+      newErrors.service = t("validationServiceRequired");
+    }
+
+    if (!formData.date) {
+      newErrors.date = t("validationDateRequired");
+    }
+
+    if (!formData.time) {
+      newErrors.time = t("validationTimeRequired");
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -32,10 +70,19 @@ function Home() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus(null);
 
@@ -50,7 +97,7 @@ function Home() {
     });
 
     setIsSubmitting(false);
-    
+
     if (result.success) {
       setSubmitStatus("success");
       setFormData({
@@ -340,111 +387,147 @@ function Home() {
           <p className="section-subtitle">{t("contactSubtitle")}</p>
 
           <div className="contact-form">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
               <div className="form-row">
-                <input 
-                  type="text" 
-                  name="name"
-                  placeholder={t("yourName")} 
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required 
-                />
-                <input 
-                  type="tel" 
-                  name="phone"
-                  placeholder={t("phoneNumber")} 
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  required 
-                />
+                <div className="form-group">
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder={t("yourName")}
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className={errors.name ? "input-error" : ""}
+                  />
+                  {errors.name && (
+                    <span className="error-message">{errors.name}</span>
+                  )}
+                </div>
+                <div className="form-group">
+                  <input
+                    type="tel"
+                    name="phone"
+                    placeholder={t("phoneNumber")}
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className={errors.phone ? "input-error" : ""}
+                  />
+                  {errors.phone && (
+                    <span className="error-message">{errors.phone}</span>
+                  )}
+                </div>
               </div>
-              <input 
-                type="email" 
-                name="email"
-                placeholder={t("emailAddress")} 
-                value={formData.email}
-                onChange={handleInputChange}
-                required 
-              />
-              <select 
-                name="service"
-                value={formData.service}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="">{t("selectService")}</option>
-                <option value="haircut">Pánsky strih: 13 €</option>
-                <option value="shave">Pánsky strih fade: 15 €</option>
-                <option value="beard">
-                  Pánsky strih + brada a umývanie: 23 €
-                </option>
-                <option value="grooming">Detský strih: 10 €</option>
-                <option value="coloring">
-                  Strihanie krátkych vlasov: 20 €
-                </option>
-                <option value="coloring">
-                  Strihanie krátkych vlasov + farbenie: 28 €
-                </option>
-                <option value="coloring">
-                  Strihanie polodlhých vlasov: 23 €
-                </option>
-                <option value="coloring">
-                  Strihanie polodlhých vlasov + farbenie: 35 - 45 €
-                </option>
-                <option value="coloring">Strihanie dlhých vlasov: 25 €</option>
-                <option value="coloring">
-                  Strihanie dlhých vlasov + farbenie: 60 - 80 €
-                </option>
-                <option value="coloring">Melír krátkých vlasov: 30 €</option>
-                <option value="coloring">Melír dlhých vlasov: 60 €</option>
-                <option value="coloring">Boxerské vrkoče: 20 - 30 €</option>
-                <option value="coloring">Účesy: 25 - 35 €</option>
-                <option value="coloring">
-                  Denná úprava krátke vlasy: 15 €
-                </option>
-                <option value="coloring">
-                  Denná úprava polodlhé vlasy: 20 €
-                </option>
-                <option value="coloring">Denná úprava dlhé vlasy: 25 €</option>
-              </select>
+              <div className="form-group">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder={t("emailAddress")}
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className={errors.email ? "input-error" : ""}
+                />
+                {errors.email && (
+                  <span className="error-message">{errors.email}</span>
+                )}
+              </div>
+              <div className="form-group">
+                <select
+                  name="service"
+                  value={formData.service}
+                  onChange={handleInputChange}
+                  className={errors.service ? "input-error" : ""}
+                >
+                  <option value="">{t("selectService")}</option>
+                  <option value="haircut">Pánsky strih: 13 €</option>
+                  <option value="shave">Pánsky strih fade: 15 €</option>
+                  <option value="beard">
+                    Pánsky strih + brada a umývanie: 23 €
+                  </option>
+                  <option value="grooming">Detský strih: 10 €</option>
+                  <option value="coloring">
+                    Strihanie krátkych vlasov: 20 €
+                  </option>
+                  <option value="coloring">
+                    Strihanie krátkych vlasov + farbenie: 28 €
+                  </option>
+                  <option value="coloring">
+                    Strihanie polodlhých vlasov: 23 €
+                  </option>
+                  <option value="coloring">
+                    Strihanie polodlhých vlasov + farbenie: 35 - 45 €
+                  </option>
+                  <option value="coloring">
+                    Strihanie dlhých vlasov: 25 €
+                  </option>
+                  <option value="coloring">
+                    Strihanie dlhých vlasov + farbenie: 60 - 80 €
+                  </option>
+                  <option value="coloring">Melír krátkých vlasov: 30 €</option>
+                  <option value="coloring">Melír dlhých vlasov: 60 €</option>
+                  <option value="coloring">Boxerské vrkoče: 20 - 30 €</option>
+                  <option value="coloring">Účesy: 25 - 35 €</option>
+                  <option value="coloring">
+                    Denná úprava krátke vlasy: 15 €
+                  </option>
+                  <option value="coloring">
+                    Denná úprava polodlhé vlasy: 20 €
+                  </option>
+                  <option value="coloring">
+                    Denná úprava dlhé vlasy: 25 €
+                  </option>
+                </select>
+                {errors.service && (
+                  <span className="error-message">{errors.service}</span>
+                )}
+              </div>
               <div className="form-row">
-                <input 
-                  type="date" 
-                  name="date"
-                  value={formData.date}
-                  onChange={handleInputChange}
-                  required 
-                />
-                <input 
-                  type="time" 
-                  name="time"
-                  value={formData.time}
-                  onChange={handleInputChange}
-                  required 
-                />
+                <div className="form-group">
+                  <input
+                    type="date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleInputChange}
+                    className={errors.date ? "input-error" : ""}
+                  />
+                  {errors.date && (
+                    <span className="error-message">{errors.date}</span>
+                  )}
+                </div>
+                <div className="form-group">
+                  <input
+                    type="time"
+                    name="time"
+                    value={formData.time}
+                    onChange={handleInputChange}
+                    className={errors.time ? "input-error" : ""}
+                  />
+                  {errors.time && (
+                    <span className="error-message">{errors.time}</span>
+                  )}
+                </div>
               </div>
-              <textarea 
-                name="notes"
-                placeholder={t("additionalNotes")}
-                value={formData.notes}
-                onChange={handleInputChange}
-              ></textarea>
-              
+              <div className="form-group">
+                <textarea
+                  name="notes"
+                  placeholder={t("additionalNotes")}
+                  value={formData.notes}
+                  onChange={handleInputChange}
+                ></textarea>
+              </div>
+
               {submitStatus === "success" && (
                 <div className="form-success">
                   ✓ {t("formSuccess") || "Objednávka bola úspešne odoslaná!"}
                 </div>
               )}
-              
+
               {submitStatus === "error" && (
                 <div className="form-error">
                   ✗ {t("formError") || "Nastala chyba. Skúste znova."}
                 </div>
               )}
-              
-              <button 
-                type="submit" 
+
+              <button
+                type="submit"
                 className="btn-primary"
                 disabled={isSubmitting}
               >
