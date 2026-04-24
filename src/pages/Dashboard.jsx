@@ -287,17 +287,17 @@ export default function Dashboard() {
                   <tbody>
                     {filtered.map((a) => (
                       <tr key={a.id}>
-                        <td className="td-datetime">
+                        <td className="td-datetime" data-label={t("dashDatetime")}>
                           <span className="td-date">{a.date || "—"}</span>
                           <span className="td-time">{a.time || ""}</span>
                         </td>
-                        <td className="td-submitted">{formatDate(a.createdAt)}</td>
-                        <td className="td-name">{a.name}</td>
-                        <td>{a.phone}</td>
-                        <td className="td-email">{a.email}</td>
-                        <td className="td-service">{a.service}</td>
-                        <td className="td-notes">{a.notes || "—"}</td>
-                        <td>
+                        <td className="td-submitted" data-label={t("submittedOn")}>{formatDate(a.createdAt)}</td>
+                        <td className="td-name" data-label={t("dashName")}>{a.name}</td>
+                        <td data-label={t("dashPhone")}>{a.phone}</td>
+                        <td className="td-email" data-label={t("dashEmail")}>{a.email}</td>
+                        <td className="td-service" data-label={t("dashService")}>{a.service}</td>
+                        <td className="td-notes" data-label={t("dashNotes")}>{a.notes || "—"}</td>
+                        <td data-label={t("dashStatus")}>
                           <span
                             className={`badge ${STATUS_CLS[a.status] ?? "badge-pending"}`}
                           >
@@ -306,7 +306,7 @@ export default function Dashboard() {
                             ) || a.status}
                           </span>
                         </td>
-                        <td>
+                        <td data-label={t("dashActions")}>
                           <div className="action-group">
                             {a.status !== "confirmed" && (
                               <button
@@ -384,23 +384,23 @@ export default function Dashboard() {
                   <tbody>
                     {products.map((p) => (
                       <tr key={p.id}>
-                        <td style={{ width: 56, padding: "0.5rem 0.75rem" }}>
+                        <td className="td-img">
                           {p.imageUrl
                             ? <img src={p.imageUrl} alt={p.name} className="product-thumb" />
                             : <div className="product-thumb product-thumb--empty" />}
                         </td>
-                        <td className="td-name">{p.name}</td>
-                        <td className="td-notes">{p.description || "—"}</td>
-                        <td style={{ whiteSpace: "nowrap" }}>
+                        <td className="td-name" data-label={t("productName")}>{p.name}</td>
+                        <td className="td-notes" data-label={t("productDescription")}>{p.description || "—"}</td>
+                        <td data-label={t("productPrice")}>
                           {p.price != null ? `€${Number(p.price).toFixed(2)}` : "—"}
                         </td>
-                        <td>{p.category || "—"}</td>
-                        <td>
+                        <td data-label={t("productCategory")}>{p.category || "—"}</td>
+                        <td data-label={t("dashStatus")}>
                           <span className={`badge ${p.inStock ? "badge-confirmed" : "badge-cancelled"}`}>
                             {p.inStock ? t("inStock") : t("outOfStock")}
                           </span>
                         </td>
-                        <td>
+                        <td data-label={t("dashActions")}>
                           <div className="action-group">
                             <button
                               className="action-btn action-btn--restore"

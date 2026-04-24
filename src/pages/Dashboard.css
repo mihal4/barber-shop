@@ -501,7 +501,85 @@
   border: 1px solid #ddd;
 }
 
-/* Responsive */
+/* Responsive table → cards */
+@media (max-width: 768px) {
+  .dash-table-wrap {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .dash-table thead {
+    display: none;
+  }
+
+  .dash-table,
+  .dash-table tbody,
+  .dash-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .dash-table tr {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .dash-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.85rem;
+  }
+
+  .dash-table td:last-child {
+    border-bottom: none;
+  }
+
+  .dash-table td::before {
+    content: attr(data-label);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #999;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .dash-table td.td-img {
+    justify-content: center;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .dash-table td.td-img::before {
+    display: none;
+  }
+
+  .dash-table td.td-email,
+  .dash-table td.td-service,
+  .dash-table td.td-notes,
+  .dash-table td.td-name {
+    max-width: none;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    width: 100%;
+  }
+
+  .action-group {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+
 @media (max-width: 768px) {
   .dash-stats {
     grid-template-columns: repeat(2, 1fr);
