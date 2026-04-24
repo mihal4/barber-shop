@@ -139,44 +139,80 @@ function Home() {
           <div className="services-grid">
             <div className="service-card">
               <div className="service-icon">✂</div>
-              <h3>{t("haircut")}</h3>
-              <p>{t("haircutDesc")}</p>
-              <span className="service-price">$35</span>
+              <h3>Pánsky strih</h3>
+              <p>popis</p>
+              <span className="service-price">13 €</span>
             </div>
 
             <div className="service-card">
               <div className="service-icon">🪒</div>
-              <h3>{t("hotTowelShave")}</h3>
-              <p>{t("hotTowelShaveDesc")}</p>
-              <span className="service-price">$30</span>
+              <h3>Pánsky strih - Fade</h3>
+              <p>popis</p>
+              <span className="service-price">15 €</span>
             </div>
 
             <div className="service-card">
               <div className="service-icon">💈</div>
-              <h3>{t("beardTrim")}</h3>
-              <p>{t("beardTrimDesc")}</p>
-              <span className="service-price">$25</span>
+              <h3>Pánsky strih + brada a umývanie</h3>
+              <p>popis</p>
+              <span className="service-price">23 €</span>
             </div>
 
             <div className="service-card">
               <div className="service-icon">✨</div>
-              <h3>{t("fullGrooming")}</h3>
-              <p>{t("fullGroomingDesc")}</p>
-              <span className="service-price">$75</span>
+              <h3>Detský strih</h3>
+              <p>popis</p>
+              <span className="service-price">10 €</span>
             </div>
 
             <div className="service-card">
               <div className="service-icon">🎨</div>
-              <h3>{t("hairColoring")}</h3>
-              <p>{t("hairColoringDesc")}</p>
-              <span className="service-price">$60+</span>
+              <h3>Strihanie krátkych vlasov</h3>
+              <p>+ farbenie 28 €</p>
+              <span className="service-price">20 €</span>
             </div>
 
             <div className="service-card">
               <div className="service-icon">👔</div>
-              <h3>{t("seniorCut")}</h3>
-              <p>{t("seniorCutDesc")}</p>
-              <span className="service-price">$28</span>
+              <h3>Strihanie polodlhé vlasov</h3>
+              <p>+ farbenie 35 - 45 €</p>
+              <span className="service-price">23 €</span>
+            </div>
+
+            <div className="service-card">
+              <div className="service-icon">👔</div>
+              <h3>Strihanie dlhých vlasov</h3>
+              <p>+ farbenie 60 - 80 €</p>
+              <span className="service-price">25 €</span>
+            </div>
+
+            <div className="service-card">
+              <div className="service-icon">👔</div>
+              <h3>Melír krátkych vlasov</h3>
+              <p>Melír dlhých vlasov 60 €</p>
+              <span className="service-price">30 €</span>
+            </div>
+
+            <div className="service-card">
+              <div className="service-icon">👔</div>
+              <h3>Boxerské vrkoče</h3>
+              <p>popis</p>
+              <span className="service-price">20 -30 €</span>
+            </div>
+
+            <div className="service-card">
+              <div className="service-icon">👔</div>
+              <h3>Účesy</h3>
+              <p>popis</p>
+              <span className="service-price">25 -35 €</span>
+            </div>
+
+            <div className="service-card">
+              <div className="service-icon">👔</div>
+              <h3>Denná úprava krátke vlasy</h3>
+              <p>Denná úprava polodlhé 20 €</p>
+              <p>Denná úprava dlhé 25 €</p>
+              <span className="service-price">15 €</span>
             </div>
           </div>
         </div>
@@ -260,11 +296,39 @@ function Home() {
               <input type="email" placeholder={t("emailAddress")} />
               <select>
                 <option value="">{t("selectService")}</option>
-                <option value="haircut">{t("haircut")} - $35</option>
-                <option value="shave">{t("hotTowelShave")} - $30</option>
-                <option value="beard">{t("beardTrim")} - $25</option>
-                <option value="grooming">{t("fullGrooming")} - $75</option>
-                <option value="coloring">{t("hairColoring")} - $60+</option>
+                <option value="haircut">Pánsky strih: 13 €</option>
+                <option value="shave">Pánsky strih fade: 15 €</option>
+                <option value="beard">
+                  Pánsky strih + brada a umývanie: 23 €
+                </option>
+                <option value="grooming">Detský strih: 10 €</option>
+                <option value="coloring">
+                  Strihanie krátkych vlasov: 20 €
+                </option>
+                <option value="coloring">
+                  Strihanie krátkych vlasov + farbenie: 28 €
+                </option>
+                <option value="coloring">
+                  Strihanie polodlhých vlasov: 23 €
+                </option>
+                <option value="coloring">
+                  Strihanie polodlhých vlasov + farbenie: 35 - 45 €
+                </option>
+                <option value="coloring">Strihanie dlhých vlasov: 25 €</option>
+                <option value="coloring">
+                  Strihanie dlhých vlasov + farbenie: 60 - 80 €
+                </option>
+                <option value="coloring">Melír krátkých vlasov: 30 €</option>
+                <option value="coloring">Melír dlhých vlasov: 60 €</option>
+                <option value="coloring">Boxerské vrkoče: 20 - 30 €</option>
+                <option value="coloring">Účesy: 25 - 35 €</option>
+                <option value="coloring">
+                  Denná úprava krátke vlasy: 15 €
+                </option>
+                <option value="coloring">
+                  Denná úprava polodlhé vlasy: 20 €
+                </option>
+                <option value="coloring">Denná úprava dlhé vlasy: 25 €</option>
               </select>
               <input type="date" />
               <textarea placeholder={t("additionalNotes")}></textarea>

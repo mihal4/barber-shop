@@ -138,7 +138,7 @@ const translations = {
 
     // Contact
     bookAppointment: "Objednať termín",
-    contactSubtitle: "Walk-in welcome, termíny odporúčame",
+    contactSubtitle: "Popis, termíny odporúčame",
     yourName: "Vaše meno",
     phoneNumber: "Telefónne číslo",
     emailAddress: "Emailová adresa",
