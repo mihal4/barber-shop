@@ -495,41 +495,49 @@ function Home() {
                   className={errors.service ? "input-error" : ""}
                 >
                   <option value="">{t("selectService")}</option>
-                  <option value="haircut">Pánsky strih: 13 €</option>
-                  <option value="shave">Pánsky strih fade: 15 €</option>
-                  <option value="beard">
+                  <option value="Pánsky strih">Pánsky strih: 13 €</option>
+                  <option value="Pánsky strih fade">
+                    Pánsky strih fade: 15 €
+                  </option>
+                  <option value="Pánsky strih + brada a umývanie">
                     Pánsky strih + brada a umývanie: 23 €
                   </option>
-                  <option value="grooming">Detský strih: 10 €</option>
-                  <option value="coloring">
+                  <option value="Detský strih">Detský strih: 10 €</option>
+                  <option value="Strihanie krátkych vlasov">
                     Strihanie krátkych vlasov: 20 €
                   </option>
-                  <option value="coloring">
+                  <option value="Strihanie krátkych vlasov + farbenie">
                     Strihanie krátkych vlasov + farbenie: 28 €
                   </option>
-                  <option value="coloring">
+                  <option value="Strihanie polodlhých vlasov">
                     Strihanie polodlhých vlasov: 23 €
                   </option>
-                  <option value="coloring">
+                  <option value="Strihanie polodlhých vlasov + farbenie">
                     Strihanie polodlhých vlasov + farbenie: 35 - 45 €
                   </option>
-                  <option value="coloring">
+                  <option value="Strihanie dlhých vlasov">
                     Strihanie dlhých vlasov: 25 €
                   </option>
-                  <option value="coloring">
+                  <option value="Strihanie dlhých vlasov + farbenie">
                     Strihanie dlhých vlasov + farbenie: 60 - 80 €
                   </option>
-                  <option value="coloring">Melír krátkých vlasov: 30 €</option>
-                  <option value="coloring">Melír dlhých vlasov: 60 €</option>
-                  <option value="coloring">Boxerské vrkoče: 20 - 30 €</option>
-                  <option value="coloring">Účesy: 25 - 35 €</option>
-                  <option value="coloring">
+                  <option value="Melír krátkých vlasov">
+                    Melír krátkých vlasov: 30 €
+                  </option>
+                  <option value="Melír dlhých vlasov">
+                    Melír dlhých vlasov: 60 €
+                  </option>
+                  <option value="Boxerské vrkoče">
+                    Boxerské vrkoče: 20 - 30 €
+                  </option>
+                  <option value="Účesy">Účesy: 25 - 35 €</option>
+                  <option value="Denná úprava krátke vlasy">
                     Denná úprava krátke vlasy: 15 €
                   </option>
-                  <option value="coloring">
+                  <option value="Denná úprava polodlhé vlasy">
                     Denná úprava polodlhé vlasy: 20 €
                   </option>
-                  <option value="coloring">
+                  <option value="Denná úprava dlhé vlasy">
                     Denná úprava dlhé vlasy: 25 €
                   </option>
                 </select>
