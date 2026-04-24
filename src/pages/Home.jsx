@@ -71,9 +71,6 @@ function Home() {
             </li>
           </ul>
           <div className="nav-right">
-            <button className="lang-toggle" onClick={toggleLanguage}>
-              {language === "en" ? "SK" : "EN"}
-            </button>
             <button
               className="nav-cta"
               onClick={(e) => {
