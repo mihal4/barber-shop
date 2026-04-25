@@ -119,6 +119,7 @@ const translations = {
     validationDateRequired: "Please select a date",
     validationTimeRequired: "Please select a time",
     validationSlotTaken: "This date and time is already booked. Please choose another slot.",
+    validationNoSunday: "We are closed on Sundays. Please select another day.",
     selectTime: "Select time",
 
     // Footer
@@ -242,6 +243,7 @@ const translations = {
     validationDateRequired: "Vyberte dátum",
     validationTimeRequired: "Vyberte čas",
     validationSlotTaken: "Tento termín je už obsadený. Vyberte iný čas.",
+    validationNoSunday: "V nedeľu sme zatvorení. Vyberte iný deň.",
     selectTime: "Vyberte čas",
 
     // Footer

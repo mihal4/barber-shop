@@ -129,8 +129,17 @@ function Home() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "date" && value) {
+      const [y, m, d] = value.split("-").map(Number);
+      if (new Date(y, m - 1, d).getDay() === 0) {
+        setErrors((prev) => ({ ...prev, date: t("validationNoSunday") }));
+        setFormData((prev) => ({ ...prev, date: "", time: "" }));
+        return;
+      }
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }

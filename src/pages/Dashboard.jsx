@@ -122,6 +122,16 @@ export default function Dashboard() {
     setConfirmDelete(null);
   };
 
+  const formatAppointmentDate = (dateStr) => {
+    if (!dateStr) return "—";
+    const [y, m, d] = dateStr.split("-").map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString("sk-SK", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
   const formatDate = (ts) => {
     if (!ts) return "—";
     const d = ts.toDate ? ts.toDate() : new Date(ts);
@@ -295,7 +305,7 @@ export default function Dashboard() {
                     {filtered.map((a) => (
                       <tr key={a.id}>
                         <td className="td-datetime" data-label={t("dashDatetime")}>
-                          <span className="td-date">{a.date || "—"}</span>
+                          <span className="td-date">{formatAppointmentDate(a.date)}</span>
                           <span className="td-time">{a.time || ""}</span>
                         </td>
                         <td className="td-submitted" data-label={t("submittedOn")}>{formatDate(a.createdAt)}</td>
