@@ -409,7 +409,7 @@ export default function Dashboard() {
                         <td className="td-name" data-label={t("productName")}>{p.name}</td>
                         <td className="td-notes" data-label={t("productDescription")}>{p.description || "—"}</td>
                         <td data-label={t("productPrice")}>
-                          {p.price != null ? `€${Number(p.price).toFixed(2)}` : "—"}
+                          {p.price != null ? `${Number(p.price).toFixed(2)} €` : "—"}
                         </td>
                         <td data-label={t("productCategory")}>{p.category || "—"}</td>
                         <td data-label={t("dashStatus")}>

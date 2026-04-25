@@ -19,7 +19,7 @@ export default function Profile() {
 
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState("upcoming");
 
   useEffect(() => {
     if (!user) {
