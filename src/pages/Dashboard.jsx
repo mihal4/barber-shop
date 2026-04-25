@@ -96,7 +96,13 @@ export default function Dashboard() {
   };
 
   const filtered = appointments.filter((a) => {
-    if (filter !== "all" && a.status !== filter) return false;
+    const isPast = a.date && a.date < today;
+    if (filter === "past") {
+      if (!isPast) return false;
+    } else {
+      if (isPast) return false;
+      if (filter !== "all" && a.status !== filter) return false;
+    }
     if (search) {
       const q = search.toLowerCase();
       return (
@@ -244,6 +250,7 @@ export default function Dashboard() {
                   ["pending", t("statusPending")],
                   ["confirmed", t("statusConfirmed")],
                   ["cancelled", t("statusCancelled")],
+                  ["past", t("filterPast")],
                 ].map(([val, label]) => (
                   <button
                     key={val}
