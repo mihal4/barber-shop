@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/config";
@@ -41,11 +42,16 @@ export default function Dashboard() {
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(true);
   const [productModal, setProductModal] = useState(null); // { mode: 'add'|'edit', data: {} }
-  const [productForm, setProductForm] = useState(EMPTY_PRODUCT);
-  const [productSaving, setProductSaving] = useState(false);
   const [confirmDeleteProduct, setConfirmDeleteProduct] = useState(null);
   const [productImageFile, setProductImageFile] = useState(null);
   const [productImagePreview, setProductImagePreview] = useState(null);
+
+  const {
+    register: registerProduct,
+    handleSubmit: handleProductSubmit,
+    formState: { isSubmitting: productSaving },
+    reset: resetProduct,
+  } = useForm({ defaultValues: EMPTY_PRODUCT });
 
   useEffect(() => {
     if (!isAdmin) {
@@ -146,17 +152,23 @@ export default function Dashboard() {
 
   // Product handlers
   const openProductModal = (mode, data = EMPTY_PRODUCT) => {
-    setProductForm({ ...data });
     setProductModal({ mode, data });
     setProductImageFile(null);
     setProductImagePreview(data.imageUrl || null);
+    resetProduct({
+      name: data.name || "",
+      description: data.description || "",
+      price: data.price ?? "",
+      category: data.category || "",
+      inStock: data.inStock !== undefined ? data.inStock : true,
+    });
   };
 
   const closeProductModal = () => {
     setProductModal(null);
-    setProductForm(EMPTY_PRODUCT);
     setProductImageFile(null);
     setProductImagePreview(null);
+    resetProduct(EMPTY_PRODUCT);
   };
 
   const handleImageChange = (e) => {
@@ -166,21 +178,19 @@ export default function Dashboard() {
     setProductImagePreview(URL.createObjectURL(file));
   };
 
-  const handleProductSave = async () => {
-    setProductSaving(true);
+  const onProductSubmit = async (data) => {
     const payload = {
-      name: productForm.name.trim(),
-      description: productForm.description.trim(),
-      price: parseFloat(productForm.price) || 0,
-      category: productForm.category.trim(),
-      inStock: productForm.inStock,
+      name: data.name.trim(),
+      description: (data.description || "").trim(),
+      price: parseFloat(data.price) || 0,
+      category: (data.category || "").trim(),
+      inStock: !!data.inStock,
     };
     if (productModal.mode === "add") {
       await addProduct(payload, productImageFile);
     } else {
       await updateProduct(productModal.data.id, payload, productImageFile, productModal.data.imageUrl);
     }
-    setProductSaving(false);
     closeProductModal();
   };
 
@@ -497,7 +507,7 @@ export default function Dashboard() {
           <div className="modal modal--product" onClick={(e) => e.stopPropagation()}>
             <h3>{productModal.mode === "add" ? t("addProduct") : t("editProduct")}</h3>
 
-            <div className="product-form">
+            <form className="product-form" onSubmit={handleProductSubmit(onProductSubmit)}>
               <label className="product-label">
                 {t("productImage")}
                 <div className="product-image-picker">
@@ -518,8 +528,7 @@ export default function Dashboard() {
                 <input
                   className="product-input"
                   type="text"
-                  value={productForm.name}
-                  onChange={(e) => setProductForm((f) => ({ ...f, name: e.target.value }))}
+                  {...registerProduct("name", { required: true })}
                 />
               </label>
 
@@ -527,8 +536,7 @@ export default function Dashboard() {
                 {t("productDescription")}
                 <textarea
                   className="product-input product-textarea"
-                  value={productForm.description}
-                  onChange={(e) => setProductForm((f) => ({ ...f, description: e.target.value }))}
+                  {...registerProduct("description")}
                 />
               </label>
 
@@ -540,8 +548,7 @@ export default function Dashboard() {
                     type="number"
                     min="0"
                     step="0.01"
-                    value={productForm.price}
-                    onChange={(e) => setProductForm((f) => ({ ...f, price: e.target.value }))}
+                    {...registerProduct("price")}
                   />
                 </label>
 
@@ -550,8 +557,7 @@ export default function Dashboard() {
                   <input
                     className="product-input"
                     type="text"
-                    value={productForm.category}
-                    onChange={(e) => setProductForm((f) => ({ ...f, category: e.target.value }))}
+                    {...registerProduct("category")}
                   />
                 </label>
               </div>
@@ -559,25 +565,24 @@ export default function Dashboard() {
               <label className="product-label product-label--checkbox">
                 <input
                   type="checkbox"
-                  checked={productForm.inStock}
-                  onChange={(e) => setProductForm((f) => ({ ...f, inStock: e.target.checked }))}
+                  {...registerProduct("inStock")}
                 />
                 {t("inStock")}
               </label>
-            </div>
 
-            <div className="modal-actions">
-              <button
-                className="action-btn action-btn--confirm"
-                onClick={handleProductSave}
-                disabled={productSaving || !productForm.name.trim()}
-              >
-                {t("save")}
-              </button>
-              <button className="filter-btn" onClick={closeProductModal}>
-                {t("dashCancel")}
-              </button>
-            </div>
+              <div className="modal-actions">
+                <button
+                  className="action-btn action-btn--confirm"
+                  type="submit"
+                  disabled={productSaving}
+                >
+                  {t("save")}
+                </button>
+                <button className="filter-btn" type="button" onClick={closeProductModal}>
+                  {t("dashCancel")}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
