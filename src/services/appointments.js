@@ -74,6 +74,27 @@ export const deleteAppointment = async (id) => {
   }
 };
 
+// Get all taken time slots for a given date
+export const getTakenSlots = async (date) => {
+  try {
+    const q = query(collection(db, "appointments"), where("date", "==", date));
+    const snapshot = await getDocs(q);
+    return snapshot.docs
+      .map((doc) => doc.data())
+      .filter((d) => d.status === "pending" || d.status === "confirmed")
+      .map((d) => d.time);
+  } catch (error) {
+    console.error("Error fetching taken slots:", error);
+    return [];
+  }
+};
+
+// Check if a date+time slot is already taken
+export const isSlotTaken = async (date, time) => {
+  const taken = await getTakenSlots(date);
+  return taken.includes(time);
+};
+
 // Get appointments by email
 export const getAppointmentsByEmail = async (email) => {
   try {

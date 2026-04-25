@@ -118,6 +118,8 @@ const translations = {
     validationServiceRequired: "Please select a service",
     validationDateRequired: "Please select a date",
     validationTimeRequired: "Please select a time",
+    validationSlotTaken: "This date and time is already booked. Please choose another slot.",
+    selectTime: "Select time",
 
     // Footer
     allRightsReserved: "All rights reserved.",
@@ -239,6 +241,8 @@ const translations = {
     validationServiceRequired: "Vyberte službu",
     validationDateRequired: "Vyberte dátum",
     validationTimeRequired: "Vyberte čas",
+    validationSlotTaken: "Tento termín je už obsadený. Vyberte iný čas.",
+    selectTime: "Vyberte čas",
 
     // Footer
     allRightsReserved: "Všetky práva vyhradené.",

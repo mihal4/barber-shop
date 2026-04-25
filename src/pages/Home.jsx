@@ -5,7 +5,14 @@ import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
-import { createAppointment } from "../services/appointments";
+import { createAppointment, isSlotTaken, getTakenSlots } from "../services/appointments";
+
+const TIME_SLOTS = Array.from({ length: 21 }, (_, i) => {
+  const totalMinutes = 8 * 60 + i * 30;
+  const h = String(Math.floor(totalMinutes / 60)).padStart(2, "0");
+  const m = String(totalMinutes % 60).padStart(2, "0");
+  return `${h}:${m}`;
+});
 import "./Home.css";
 
 function Home() {
@@ -36,6 +43,7 @@ function Home() {
   const [activeDot3, setActiveDot3] = useState(0);
 
   const [products, setProducts] = useState([]);
+  const [takenSlots, setTakenSlots] = useState([]);
 
   useEffect(() => {
     const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
@@ -43,6 +51,16 @@ function Home() {
       setProducts(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
     );
   }, []);
+
+  useEffect(() => {
+    if (!formData.date) { setTakenSlots([]); return; }
+    getTakenSlots(formData.date).then((slots) => {
+      setTakenSlots(slots);
+      if (slots.includes(formData.time)) {
+        setFormData((prev) => ({ ...prev, time: "" }));
+      }
+    });
+  }, [formData.date]);
 
   const makeScrollHandler = (ref, setActive, count) => () => {
     const el = ref.current;
@@ -127,6 +145,13 @@ function Home() {
 
     setIsSubmitting(true);
     setSubmitStatus(null);
+
+    const taken = await isSlotTaken(formData.date, formData.time);
+    if (taken) {
+      setErrors((prev) => ({ ...prev, time: t("validationSlotTaken") }));
+      setIsSubmitting(false);
+      return;
+    }
 
     const result = await createAppointment({
       name: formData.name,
@@ -702,13 +727,18 @@ function Home() {
                   )}
                 </div>
                 <div className="form-group">
-                  <input
-                    type="time"
+                  <select
                     name="time"
                     value={formData.time}
                     onChange={handleInputChange}
                     className={errors.time ? "input-error" : ""}
-                  />
+                    disabled={!formData.date}
+                  >
+                    <option value="">{t("selectTime")}</option>
+                    {TIME_SLOTS.filter((slot) => !takenSlots.includes(slot)).map((slot) => (
+                      <option key={slot} value={slot}>{slot}</option>
+                    ))}
+                  </select>
                   {errors.time && (
                     <span className="error-message">{errors.time}</span>
                   )}
