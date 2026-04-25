@@ -1,11 +1,13 @@
 // src/pages/Home.jsx
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import { createAppointment, isSlotTaken, getTakenSlots } from "../services/appointments";
+import "./Home.css";
 
 const TIME_SLOTS = Array.from({ length: 21 }, (_, i) => {
   const totalMinutes = 8 * 60 + i * 30;
@@ -13,27 +15,26 @@ const TIME_SLOTS = Array.from({ length: 21 }, (_, i) => {
   const m = String(totalMinutes % 60).padStart(2, "0");
   return `${h}:${m}`;
 });
-import "./Home.css";
 
 function Home() {
   const { user, isAdmin, loginWithGoogle, logout } = useAuth();
   const navigate = useNavigate();
   const { t, toggleLanguage, language } = useLanguage();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    service: "",
-    date: "",
-    time: "",
-    notes: "",
-  });
+  const {
+    register,
+    handleSubmit: rhfHandleSubmit,
+    formState: { errors, isSubmitting },
+    watch,
+    setValue,
+    reset,
+    setError,
+  } = useForm({ mode: "onTouched" });
+
+  const watchedDate = watch("date");
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
-  const [errors, setErrors] = useState({});
 
   const grid1Ref = useRef(null);
   const grid2Ref = useRef(null);
@@ -53,14 +54,15 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    if (!formData.date) { setTakenSlots([]); return; }
-    getTakenSlots(formData.date).then((slots) => {
+    if (!watchedDate) { setTakenSlots([]); return; }
+    getTakenSlots(watchedDate).then((slots) => {
       setTakenSlots(slots);
-      if (slots.includes(formData.time)) {
-        setFormData((prev) => ({ ...prev, time: "" }));
+      if (slots.includes(watch("time"))) {
+        setValue("time", "");
       }
     });
-  }, [formData.date]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchedDate]);
 
   const makeScrollHandler = (ref, setActive, count) => () => {
     const el = ref.current;
@@ -83,43 +85,6 @@ function Home() {
     });
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = t("validationNameRequired");
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = t("validationNameMin");
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = t("validationPhoneRequired");
-    } else if (!/^[\d\s\+\-\(\)]{9,}$/.test(formData.phone.trim())) {
-      newErrors.phone = t("validationPhoneInvalid");
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = t("validationEmailRequired");
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      newErrors.email = t("validationEmailInvalid");
-    }
-
-    if (!formData.service) {
-      newErrors.service = t("validationServiceRequired");
-    }
-
-    if (!formData.date) {
-      newErrors.date = t("validationDateRequired");
-    }
-
-    if (!formData.time) {
-      newErrors.time = t("validationTimeRequired");
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -127,64 +92,28 @@ function Home() {
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    if (name === "date" && value) {
-      const [y, m, d] = value.split("-").map(Number);
-      if (new Date(y, m - 1, d).getDay() === 0) {
-        setErrors((prev) => ({ ...prev, date: t("validationNoSunday") }));
-        setFormData((prev) => ({ ...prev, date: "", time: "" }));
-        return;
-      }
-    }
-
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsSubmitting(true);
+  const onSubmit = async (data) => {
     setSubmitStatus(null);
 
-    const taken = await isSlotTaken(formData.date, formData.time);
+    const taken = await isSlotTaken(data.date, data.time);
     if (taken) {
-      setErrors((prev) => ({ ...prev, time: t("validationSlotTaken") }));
-      setIsSubmitting(false);
+      setError("time", { message: t("validationSlotTaken") });
       return;
     }
 
     const result = await createAppointment({
-      name: formData.name,
-      phone: formData.phone,
-      email: formData.email,
-      service: formData.service,
-      date: formData.date,
-      time: formData.time,
-      notes: formData.notes,
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      service: data.service,
+      date: data.date,
+      time: data.time,
+      notes: data.notes || "",
     });
-
-    setIsSubmitting(false);
 
     if (result.success) {
       setSubmitStatus("success");
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        service: "",
-        date: "",
-        time: "",
-        notes: "",
-      });
+      reset();
     } else {
       setSubmitStatus("error");
     }
@@ -622,54 +551,63 @@ function Home() {
           <p className="section-subtitle">{t("contactSubtitle")}</p>
 
           <div className="contact-form">
-            <form onSubmit={handleSubmit} noValidate>
+            <form onSubmit={rhfHandleSubmit(onSubmit)} noValidate>
               <div className="form-row">
                 <div className="form-group">
                   <input
                     type="text"
-                    name="name"
                     placeholder={t("yourName")}
-                    value={formData.name}
-                    onChange={handleInputChange}
                     className={errors.name ? "input-error" : ""}
+                    {...register("name", {
+                      required: t("validationNameRequired"),
+                      minLength: { value: 2, message: t("validationNameMin") },
+                    })}
                   />
                   {errors.name && (
-                    <span className="error-message">{errors.name}</span>
+                    <span className="error-message">{errors.name.message}</span>
                   )}
                 </div>
                 <div className="form-group">
                   <input
                     type="tel"
-                    name="phone"
                     placeholder={t("phoneNumber")}
-                    value={formData.phone}
-                    onChange={handleInputChange}
                     className={errors.phone ? "input-error" : ""}
+                    {...register("phone", {
+                      required: t("validationPhoneRequired"),
+                      pattern: {
+                        value: /^[\d\s+\-()]{9,}$/,
+                        message: t("validationPhoneInvalid"),
+                      },
+                    })}
                   />
                   {errors.phone && (
-                    <span className="error-message">{errors.phone}</span>
+                    <span className="error-message">{errors.phone.message}</span>
                   )}
                 </div>
               </div>
               <div className="form-group">
                 <input
                   type="email"
-                  name="email"
                   placeholder={t("emailAddress")}
-                  value={formData.email}
-                  onChange={handleInputChange}
                   className={errors.email ? "input-error" : ""}
+                  {...register("email", {
+                    required: t("validationEmailRequired"),
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: t("validationEmailInvalid"),
+                    },
+                  })}
                 />
                 {errors.email && (
-                  <span className="error-message">{errors.email}</span>
+                  <span className="error-message">{errors.email.message}</span>
                 )}
               </div>
               <div className="form-group">
                 <select
-                  name="service"
-                  value={formData.service}
-                  onChange={handleInputChange}
                   className={errors.service ? "input-error" : ""}
+                  {...register("service", {
+                    required: t("validationServiceRequired"),
+                  })}
                 >
                   <option value="">{t("selectService")}</option>
                   <option value="Pánsky strih">Pánsky strih: 13 €</option>
@@ -719,29 +657,36 @@ function Home() {
                   </option>
                 </select>
                 {errors.service && (
-                  <span className="error-message">{errors.service}</span>
+                  <span className="error-message">{errors.service.message}</span>
                 )}
               </div>
               <div className="form-row">
                 <div className="form-group">
                   <input
                     type="date"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleInputChange}
                     className={errors.date ? "input-error" : ""}
+                    {...register("date", {
+                      required: t("validationDateRequired"),
+                      validate: (value) => {
+                        const [y, m, d] = value.split("-").map(Number);
+                        return (
+                          new Date(y, m - 1, d).getDay() !== 0 ||
+                          t("validationNoSunday")
+                        );
+                      },
+                    })}
                   />
                   {errors.date && (
-                    <span className="error-message">{errors.date}</span>
+                    <span className="error-message">{errors.date.message}</span>
                   )}
                 </div>
                 <div className="form-group">
                   <select
-                    name="time"
-                    value={formData.time}
-                    onChange={handleInputChange}
                     className={errors.time ? "input-error" : ""}
-                    disabled={!formData.date}
+                    disabled={!watchedDate}
+                    {...register("time", {
+                      required: t("validationTimeRequired"),
+                    })}
                   >
                     <option value="">{t("selectTime")}</option>
                     {TIME_SLOTS.filter((slot) => !takenSlots.includes(slot)).map((slot) => (
@@ -749,16 +694,14 @@ function Home() {
                     ))}
                   </select>
                   {errors.time && (
-                    <span className="error-message">{errors.time}</span>
+                    <span className="error-message">{errors.time.message}</span>
                   )}
                 </div>
               </div>
               <div className="form-group">
                 <textarea
-                  name="notes"
                   placeholder={t("additionalNotes")}
-                  value={formData.notes}
-                  onChange={handleInputChange}
+                  {...register("notes")}
                 ></textarea>
               </div>
 
