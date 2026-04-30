@@ -16,6 +16,13 @@ import manHaircutImg from "../assets/man_haircut.png";
 import fadeImg from "../assets/fade.png";
 import fadeBeardImg from "../assets/fade_beard.png";
 import fadeKidImg from "../assets/fade_kid.png";
+import womanShortImg from "../assets/woman_short.png";
+import womanSemiLongImg from "../assets/woman_semi_long.png";
+import womanLongImg from "../assets/woman_long.png";
+import womanHighShortImg from "../assets/woman_high_short.png";
+import boxingImg from "../assets/boxing.png";
+import womanBasicImg from "../assets/woman_basic.png";
+import womanDailyImg from "../assets/woman_daily.png";
 
 const TIME_SLOTS = Array.from({ length: 21 }, (_, i) => {
   const totalMinutes = 8 * 60 + i * 30;
@@ -320,39 +327,39 @@ function Home() {
             onScroll={makeScrollHandler(grid1Ref, setActiveDot1, 4)}
           >
             <div className="service-card">
-              <div className="service-icon">
-                <img src={manHaircutImg} alt="Pánsky strih" />
+              <img src={manHaircutImg} alt="" className="service-card-bg" />
+              <div className="service-card-content">
+                <h3>Pánsky strih</h3>
+                <p>popis</p>
+                <span className="service-price">13 €</span>
               </div>
-              <h3>Pánsky strih</h3>
-              <p>popis</p>
-              <span className="service-price">13 €</span>
             </div>
 
             <div className="service-card">
-              <div className="service-icon">
-                <img src={fadeImg} alt="Pánsky strih - Fade" />
+              <img src={fadeImg} alt="" className="service-card-bg" />
+              <div className="service-card-content">
+                <h3>Pánsky strih - Fade</h3>
+                <p>popis</p>
+                <span className="service-price">15 €</span>
               </div>
-              <h3>Pánsky strih - Fade</h3>
-              <p>popis</p>
-              <span className="service-price">15 €</span>
             </div>
 
             <div className="service-card">
-              <div className="service-icon">
-                <img src={fadeBeardImg} alt="Pánsky strih - Fade" />
+              <img src={fadeBeardImg} alt="" className="service-card-bg" />
+              <div className="service-card-content">
+                <h3>Pánsky strih + brada a umývanie</h3>
+                <p>popis</p>
+                <span className="service-price">23 €</span>
               </div>
-              <h3>Pánsky strih + brada a umývanie</h3>
-              <p>popis</p>
-              <span className="service-price">23 €</span>
             </div>
 
             <div className="service-card">
-              <div className="service-icon">
-                <img src={fadeKidImg} alt="Pánsky strih - Fade" />
+              <img src={fadeKidImg} alt="" className="service-card-bg" />
+              <div className="service-card-content">
+                <h3>Detský strih</h3>
+                <p>popis</p>
+                <span className="service-price">10 €</span>
               </div>
-              <h3>Detský strih</h3>
-              <p>popis</p>
-              <span className="service-price">10 €</span>
             </div>
           </div>
 
@@ -376,53 +383,65 @@ function Home() {
             onScroll={makeScrollHandler(grid2Ref, setActiveDot2, 7)}
           >
             <div className="service-card">
-              <div className="service-icon">🎨</div>
-              <h3>Strihanie krátkych vlasov</h3>
-              <p>+ farbenie 28 €</p>
-              <span className="service-price">20 €</span>
+              <img src={womanShortImg} alt="" className="service-card-bg" />
+              <div className="service-card-content">
+                <h3>Strihanie krátkych vlasov</h3>
+                <p>+ farbenie 28 €</p>
+                <span className="service-price">20 €</span>
+              </div>
             </div>
 
             <div className="service-card">
-              <div className="service-icon">👔</div>
-              <h3>Strihanie polodlhé vlasov</h3>
-              <p>+ farbenie 35 - 45 €</p>
-              <span className="service-price">23 €</span>
+              <img src={womanSemiLongImg} alt="" className="service-card-bg" />
+              <div className="service-card-content">
+                <h3>Strihanie polodlhé vlasov</h3>
+                <p>+ farbenie 35 - 45 €</p>
+                <span className="service-price">23 €</span>
+              </div>
             </div>
 
             <div className="service-card">
-              <div className="service-icon">👔</div>
-              <h3>Strihanie dlhých vlasov</h3>
-              <p>+ farbenie 60 - 80 €</p>
-              <span className="service-price">25 €</span>
+              <img src={womanLongImg} alt="" className="service-card-bg" />
+              <div className="service-card-content">
+                <h3>Strihanie dlhých vlasov</h3>
+                <p>+ farbenie 60 - 80 €</p>
+                <span className="service-price">25 €</span>
+              </div>
             </div>
 
             <div className="service-card">
-              <div className="service-icon">👔</div>
-              <h3>Melír krátkych vlasov</h3>
-              <p>Melír dlhých vlasov 60 €</p>
-              <span className="service-price">30 €</span>
+              <img src={womanHighShortImg} alt="" className="service-card-bg" />
+              <div className="service-card-content">
+                <h3>Melír krátkych vlasov</h3>
+                <p>Melír dlhých vlasov 60 €</p>
+                <span className="service-price">30 €</span>
+              </div>
             </div>
 
             <div className="service-card">
-              <div className="service-icon">👔</div>
-              <h3>Boxerské vrkoče</h3>
-              <p>popis</p>
-              <span className="service-price">20 - 30 €</span>
+              <img src={boxingImg} alt="" className="service-card-bg" />
+              <div className="service-card-content">
+                <h3>Boxerské vrkoče</h3>
+                <span className="service-price">20 - 30 €</span>
+              </div>
             </div>
 
             <div className="service-card">
-              <div className="service-icon">👔</div>
-              <h3>Účesy</h3>
-              <p>popis</p>
-              <span className="service-price">25 - 35 €</span>
+              <img src={womanBasicImg} alt="" className="service-card-bg" />
+              <div className="service-card-content">
+                <h3>Účesy</h3>
+                <span className="service-price">25 - 35 €</span>
+              </div>
             </div>
 
             <div className="service-card">
-              <div className="service-icon">👔</div>
-              <h3>Denná úprava krátke vlasy</h3>
-              <p>Denná úprava polodlhé 20 €</p>
-              <p>Denná úprava dlhé 25 €</p>
-              <span className="service-price">15 €</span>
+              <img src={womanDailyImg} alt="" className="service-card-bg" />
+              <div className="service-card-content">
+                <h3>Denná úprava krátke vlasy</h3>
+                <p>Denná úprava polodlhé 20 €</p>
+                <p>Denná úprava dlhé 25 €</p>
+                <span className="service-price">15 €</span>
+              </div>
             </div>
           </div>
 
