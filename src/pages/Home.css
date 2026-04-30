@@ -58,6 +58,13 @@ body {
 
 .logo-icon {
   font-size: 1.5rem;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .logo-icon {
+    display: inline;
+  }
 }
 
 .logo-text {
