@@ -390,7 +390,7 @@ body {
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(10, 10, 10, 0.92) 35%,
+    rgba(10, 10, 10, 0.92) 20%,
     rgba(10, 10, 10, 0.15)
   );
   z-index: 1;
@@ -413,7 +413,7 @@ body {
   z-index: 2;
   padding: 1.5rem;
   text-align: left;
-  width: 70%;
+  width: 100%;
 }
 
 .service-card-content h3 {
@@ -483,41 +483,48 @@ body {
 }
 
 .product-card {
-  flex: 0 0 220px;
-  background: var(--white);
-  border: 1px solid transparent;
+  flex: 0 0 260px;
+  position: relative;
+  overflow: hidden;
+  min-height: 320px;
   scroll-snap-align: start;
   display: flex;
-  flex-direction: column;
-  transition: all 0.3s;
-  overflow: hidden;
+  align-items: flex-end;
+  background: #111;
+  transition: transform 0.3s;
+}
+
+.product-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(10, 10, 10, 0.92) 20%,
+    rgba(10, 10, 10, 0.15)
+  );
+  z-index: 1;
 }
 
 .product-card:hover {
-  border-color: var(--secondary);
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
 }
 
-.product-card-img {
+.product-card-bg {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: 180px;
+  height: 100%;
   object-fit: cover;
-  display: block;
+  object-position: center;
 }
 
-.product-card-img--empty {
-  background: #e5e7eb;
-}
-
-.product-card-body {
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  flex: 1;
-  gap: 0.4rem;
+.product-card-content {
+  position: relative;
+  z-index: 2;
+  padding: 1.5rem;
+  text-align: left;
+  width: 100%;
 }
 
 .product-card-category {
@@ -526,27 +533,30 @@ body {
   letter-spacing: 0.08em;
   color: var(--secondary);
   font-weight: 600;
-  text-align: center;
+  display: block;
+  margin-bottom: 0.3rem;
 }
 
-.product-card-body h3 {
+.product-card-content h3 {
+  color: #fff;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
   line-height: 1.3;
-  min-height: 2.6rem;
-  display: flex;
-  align-items: center;
 }
 
-.product-card-body p {
+.product-card-content p {
+  color: rgba(255, 255, 255, 0.6);
   font-size: 0.82rem;
-  color: var(--gray);
-  flex: 1;
+  margin-bottom: 0.75rem;
 }
 
-.product-card-body .service-price {
-  margin-top: auto;
-  align-self: center;
+.product-card-content .service-price {
+  color: #c9a227;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: none;
+  padding: 0;
 }
 
 /* About */

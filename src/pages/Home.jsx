@@ -475,26 +475,20 @@ function Home() {
             >
               {products.map((p) => (
                 <div key={p.id} className="product-card">
-                  {p.imageUrl ? (
-                    <img
-                      src={p.imageUrl}
-                      alt={p.name}
-                      className="product-card-img"
-                    />
-                  ) : (
-                    <div className="product-card-img product-card-img--empty" />
+                  {p.imageUrl && (
+                    <img src={p.imageUrl} alt="" className="product-card-bg" />
                   )}
-                  <div className="product-card-body">
+                  <div className="product-card-content">
                     {p.category && (
-                      <span className="product-card-category">
-                        {p.category}
-                      </span>
+                      <span className="product-card-category">{p.category}</span>
                     )}
                     <h3>{p.name}</h3>
                     {p.description && <p>{p.description}</p>}
-                    <span className="service-price">
-                      {p.price != null ? `${Number(p.price).toFixed(2)} €` : ""}
-                    </span>
+                    {p.price != null && (
+                      <span className="service-price">
+                        {Number(p.price).toFixed(2)} €
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
