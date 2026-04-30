@@ -6,8 +6,16 @@ import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
-import { createAppointment, isSlotTaken, getTakenSlots } from "../services/appointments";
+import {
+  createAppointment,
+  isSlotTaken,
+  getTakenSlots,
+} from "../services/appointments";
 import "./Home.css";
+import manHaircutImg from "../assets/man_haircut.png";
+import fadeImg from "../assets/fade.png";
+import fadeBeardImg from "../assets/fade_beard.png";
+import fadeKidImg from "../assets/fade_kid.png";
 
 const TIME_SLOTS = Array.from({ length: 21 }, (_, i) => {
   const totalMinutes = 8 * 60 + i * 30;
@@ -54,14 +62,17 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    if (!watchedDate) { setTakenSlots([]); return; }
+    if (!watchedDate) {
+      setTakenSlots([]);
+      return;
+    }
     getTakenSlots(watchedDate).then((slots) => {
       setTakenSlots(slots);
       if (slots.includes(watch("time"))) {
         setValue("time", "");
       }
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchedDate]);
 
   const makeScrollHandler = (ref, setActive, count) => () => {
@@ -309,28 +320,36 @@ function Home() {
             onScroll={makeScrollHandler(grid1Ref, setActiveDot1, 4)}
           >
             <div className="service-card">
-              <div className="service-icon">✂</div>
+              <div className="service-icon">
+                <img src={manHaircutImg} alt="Pánsky strih" />
+              </div>
               <h3>Pánsky strih</h3>
               <p>popis</p>
               <span className="service-price">13 €</span>
             </div>
 
             <div className="service-card">
-              <div className="service-icon">🪒</div>
+              <div className="service-icon">
+                <img src={fadeImg} alt="Pánsky strih - Fade" />
+              </div>
               <h3>Pánsky strih - Fade</h3>
               <p>popis</p>
               <span className="service-price">15 €</span>
             </div>
 
             <div className="service-card">
-              <div className="service-icon">💈</div>
+              <div className="service-icon">
+                <img src={fadeBeardImg} alt="Pánsky strih - Fade" />
+              </div>
               <h3>Pánsky strih + brada a umývanie</h3>
               <p>popis</p>
               <span className="service-price">23 €</span>
             </div>
 
             <div className="service-card">
-              <div className="service-icon">✨</div>
+              <div className="service-icon">
+                <img src={fadeKidImg} alt="Pánsky strih - Fade" />
+              </div>
               <h3>Detský strih</h3>
               <p>popis</p>
               <span className="service-price">10 €</span>
@@ -581,7 +600,9 @@ function Home() {
                     })}
                   />
                   {errors.phone && (
-                    <span className="error-message">{errors.phone.message}</span>
+                    <span className="error-message">
+                      {errors.phone.message}
+                    </span>
                   )}
                 </div>
               </div>
@@ -657,7 +678,9 @@ function Home() {
                   </option>
                 </select>
                 {errors.service && (
-                  <span className="error-message">{errors.service.message}</span>
+                  <span className="error-message">
+                    {errors.service.message}
+                  </span>
                 )}
               </div>
               <div className="form-row">
@@ -689,8 +712,12 @@ function Home() {
                     })}
                   >
                     <option value="">{t("selectTime")}</option>
-                    {TIME_SLOTS.filter((slot) => !takenSlots.includes(slot)).map((slot) => (
-                      <option key={slot} value={slot}>{slot}</option>
+                    {TIME_SLOTS.filter(
+                      (slot) => !takenSlots.includes(slot),
+                    ).map((slot) => (
+                      <option key={slot} value={slot}>
+                        {slot}
+                      </option>
                     ))}
                   </select>
                   {errors.time && (

@@ -400,6 +400,12 @@ body {
   margin-bottom: 1rem;
 }
 
+.service-icon img {
+  width: 5rem;
+  height: 5rem;
+  object-fit: contain;
+}
+
 .service-card h3 {
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
