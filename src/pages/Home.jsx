@@ -298,7 +298,7 @@ function Home() {
               </button>
             </div>
           </div>
-          <div className="hero-stats">
+          {/* <div className="hero-stats">
             <div className="stat">
               <span className="stat-number">15+</span>
               <span className="stat-label">{t("yearsExp")}</span>
@@ -311,7 +311,7 @@ function Home() {
               <span className="stat-number">5★</span>
               <span className="stat-label">{t("rating")}</span>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -480,7 +480,9 @@ function Home() {
                   )}
                   <div className="product-card-content">
                     {p.category && (
-                      <span className="product-card-category">{p.category}</span>
+                      <span className="product-card-category">
+                        {p.category}
+                      </span>
                     )}
                     <h3>{p.name}</h3>
                     {p.description && <p>{p.description}</p>}
