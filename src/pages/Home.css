@@ -653,6 +653,15 @@ body {
   color: var(--secondary) !important;
 }
 
+.phone a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.phone a:hover {
+  text-decoration: underline;
+}
+
 /* Contact */
 .contact {
   background: var(--white);

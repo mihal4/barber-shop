@@ -550,7 +550,7 @@ function Home() {
                 <br />
                 05201
               </p>
-              <p className="phone">📞 (+421) 949 727 574</p>
+              <p className="phone">📞 <a href="tel:+421949727574">(+421) 949 727 574</a></p>
             </div>
           </div>
         </div>
