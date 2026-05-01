@@ -14,11 +14,18 @@ import {
 import { db } from "../firebase/config";
 import { notifyAdminNewAppointment, notifyClientStatusChange } from "./email";
 
+const toStoredDate = (isoDate) => {
+  if (!isoDate) return isoDate;
+  const [y, m, d] = isoDate.split("-");
+  return `${d}.${m}.${y}`;
+};
+
 // Create a new appointment
 export const createAppointment = async (appointmentData) => {
   try {
     const docRef = await addDoc(collection(db, "appointments"), {
       ...appointmentData,
+      date: toStoredDate(appointmentData.date),
       status: "pending",
       createdAt: serverTimestamp(),
     });
@@ -77,7 +84,7 @@ export const deleteAppointment = async (id) => {
 // Get all taken time slots for a given date
 export const getTakenSlots = async (date) => {
   try {
-    const q = query(collection(db, "appointments"), where("date", "==", date));
+    const q = query(collection(db, "appointments"), where("date", "==", toStoredDate(date)));
     const snapshot = await getDocs(q);
     return snapshot.docs
       .map((doc) => doc.data())

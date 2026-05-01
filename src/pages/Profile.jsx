@@ -50,12 +50,20 @@ export default function Profile() {
     return unsubscribe;
   }, [user, navigate]);
 
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("en-CA");
+
+  const toISO = (dateStr) => {
+    if (!dateStr) return "";
+    if (dateStr.includes("-")) return dateStr;
+    const [d, m, y] = dateStr.split(".");
+    return `${y}-${m}-${d}`;
+  };
 
   const filtered = appointments.filter((a) => {
+    const iso = toISO(a.date);
     if (filter === "upcoming")
-      return a.date >= today && a.status !== "cancelled";
-    if (filter === "past") return a.date < today;
+      return iso >= today && a.status !== "cancelled";
+    if (filter === "past") return iso < today;
     return true;
   });
 

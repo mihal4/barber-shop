@@ -92,7 +92,11 @@ function Home() {
   const [activeDot2, setActiveDot2] = useState(0);
   const [activeDot3, setActiveDot3] = useState(0);
 
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("en-CA");
+
+  const isSaturday = watchedDate
+    ? new Date(...watchedDate.split("-").map((n, i) => i === 1 ? +n - 1 : +n)).getDay() === 6
+    : false;
 
   const isTooSoon = (timeStr) => {
     if (watchedDate !== today) return false;
@@ -711,7 +715,7 @@ function Home() {
                   >
                     <option value="">{t("selectTime")}</option>
                     {activeTimeSlots
-                      .filter((slot) => !takenSlots.includes(slot) && !isTooSoon(slot))
+                      .filter((slot) => !takenSlots.includes(slot) && !isTooSoon(slot) && (!isSaturday || slot <= "11:30"))
                       .map((slot) => (
                         <option key={slot} value={slot}>{slot}</option>
                       ))}

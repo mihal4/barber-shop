@@ -92,17 +92,24 @@ export default function Dashboard() {
     return unsubscribe;
   }, [isAdmin]);
 
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("en-CA");
+
+  const toISO = (dateStr) => {
+    if (!dateStr) return "";
+    if (dateStr.includes("-")) return dateStr;
+    const [d, m, y] = dateStr.split(".");
+    return `${y}-${m}-${d}`;
+  };
 
   const stats = {
     total: appointments.length,
     pending: appointments.filter((a) => a.status === "pending").length,
     confirmed: appointments.filter((a) => a.status === "confirmed").length,
-    today: appointments.filter((a) => a.date === today).length,
+    today: appointments.filter((a) => toISO(a.date) === today).length,
   };
 
   const filtered = appointments.filter((a) => {
-    const isPast = a.date && a.date < today;
+    const isPast = a.date && toISO(a.date) < today;
     if (filter === "past") {
       if (!isPast) return false;
     } else {
@@ -130,6 +137,7 @@ export default function Dashboard() {
 
   const formatAppointmentDate = (dateStr) => {
     if (!dateStr) return "—";
+    if (!dateStr.includes("-")) return dateStr;
     const [y, m, d] = dateStr.split("-").map(Number);
     return new Date(y, m - 1, d).toLocaleDateString("sk-SK", {
       day: "2-digit",
@@ -320,7 +328,11 @@ export default function Dashboard() {
                         </td>
                         <td className="td-submitted" data-label={t("submittedOn")}>{formatDate(a.createdAt)}</td>
                         <td className="td-name" data-label={t("dashName")}>{a.name}</td>
-                        <td data-label={t("dashPhone")}>{a.phone}</td>
+                        <td data-label={t("dashPhone")}>
+                          {a.phone
+                            ? <a href={`tel:${a.phone.replace(/\s/g, "")}`} style={{ color: "inherit", textDecoration: "none" }}>{a.phone}</a>
+                            : "—"}
+                        </td>
                         <td className="td-email" data-label={t("dashEmail")}>{a.email}</td>
                         <td className="td-service" data-label={t("dashService")}>{a.service}</td>
                         <td className="td-notes" data-label={t("dashNotes")}>{a.notes || "—"}</td>
