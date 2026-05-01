@@ -684,12 +684,16 @@ function Home() {
                     className={errors.date ? "input-error" : ""}
                     {...register("date", {
                       required: t("validationDateRequired"),
-                      validate: (value) => {
-                        const [y, m, d] = value.split("-").map(Number);
-                        return (
-                          new Date(y, m - 1, d).getDay() !== 0 ||
-                          t("validationNoSunday")
-                        );
+                      onChange: (e) => {
+                        const val = e.target.value;
+                        if (val) {
+                          const [y, m, d] = val.split("-").map(Number);
+                          if (new Date(y, m - 1, d).getDay() === 0) {
+                            setValue("date", "");
+                            setValue("time", "");
+                            setError("date", { message: t("validationNoSunday") });
+                          }
+                        }
                       },
                     })}
                   />
