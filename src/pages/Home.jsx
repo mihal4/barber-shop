@@ -24,6 +24,23 @@ import boxingImg from "../assets/boxing.png";
 import womanBasicImg from "../assets/woman_basic.png";
 import womanDailyImg from "../assets/woman_daily.png";
 
+const MEN_SERVICES = [
+  { img: manHaircutImg, title: "Pánsky strih", desc: "popis", price: "13 €" },
+  { img: fadeImg, title: "Pánsky strih - Fade", desc: "popis", price: "15 €" },
+  { img: fadeBeardImg, title: "Pánsky strih + brada a umývanie", desc: "popis", price: "23 €" },
+  { img: fadeKidImg, title: "Detský strih", desc: "popis", price: "10 €" },
+];
+
+const WOMEN_SERVICES = [
+  { img: womanShortImg, title: "Strihanie krátkych vlasov", desc: "+ farbenie 28 €", price: "20 €" },
+  { img: womanSemiLongImg, title: "Strihanie polodlhé vlasov", desc: "+ farbenie 35 - 45 €", price: "23 €" },
+  { img: womanLongImg, title: "Strihanie dlhých vlasov", desc: "+ farbenie 60 - 80 €", price: "25 €" },
+  { img: womanHighShortImg, title: "Melír krátkych vlasov", desc: "Melír dlhých vlasov 60 €", price: "30 €" },
+  { img: boxingImg, title: "Boxerské vrkoče", desc: null, price: "20 - 30 €" },
+  { img: womanBasicImg, title: "Účesy", desc: null, price: "25 - 35 €" },
+  { img: womanDailyImg, title: "Denná úprava krátke vlasy", desc: "Denná úprava polodlhé 20 € / dlhé 25 €", price: "15 €" },
+];
+
 const TIME_SLOTS = Array.from({ length: 21 }, (_, i) => {
   const totalMinutes = 8 * 60 + i * 30;
   const h = String(Math.floor(totalMinutes / 60)).padStart(2, "0");
@@ -324,51 +341,26 @@ function Home() {
           <div
             className="services-grid"
             ref={grid1Ref}
-            onScroll={makeScrollHandler(grid1Ref, setActiveDot1, 4)}
+            onScroll={makeScrollHandler(grid1Ref, setActiveDot1, MEN_SERVICES.length)}
           >
-            <div className="service-card">
-              <img src={manHaircutImg} alt="" className="service-card-bg" />
-              <div className="service-card-content">
-                <h3>Pánsky strih</h3>
-                <p>popis</p>
-                <span className="service-price">13 €</span>
+            {MEN_SERVICES.map((s) => (
+              <div key={s.title} className="service-card">
+                <img src={s.img} alt="" className="service-card-bg" />
+                <div className="service-card-content">
+                  <h3>{s.title}</h3>
+                  {s.desc && <p>{s.desc}</p>}
+                  <span className="service-price">{s.price}</span>
+                </div>
               </div>
-            </div>
-
-            <div className="service-card">
-              <img src={fadeImg} alt="" className="service-card-bg" />
-              <div className="service-card-content">
-                <h3>Pánsky strih - Fade</h3>
-                <p>popis</p>
-                <span className="service-price">15 €</span>
-              </div>
-            </div>
-
-            <div className="service-card">
-              <img src={fadeBeardImg} alt="" className="service-card-bg" />
-              <div className="service-card-content">
-                <h3>Pánsky strih + brada a umývanie</h3>
-                <p>popis</p>
-                <span className="service-price">23 €</span>
-              </div>
-            </div>
-
-            <div className="service-card">
-              <img src={fadeKidImg} alt="" className="service-card-bg" />
-              <div className="service-card-content">
-                <h3>Detský strih</h3>
-                <p>popis</p>
-                <span className="service-price">10 €</span>
-              </div>
-            </div>
+            ))}
           </div>
 
           <div className="services-dots">
-            {[0, 1, 2, 3].map((i) => (
+            {MEN_SERVICES.map((_, i) => (
               <button
                 key={i}
                 className={`services-dot ${activeDot1 === i ? "services-dot--active" : ""}`}
-                onClick={() => scrollToCard(grid1Ref, i, 4)}
+                onClick={() => scrollToCard(grid1Ref, i, MEN_SERVICES.length)}
               />
             ))}
           </div>
@@ -380,77 +372,26 @@ function Home() {
           <div
             className="services-grid"
             ref={grid2Ref}
-            onScroll={makeScrollHandler(grid2Ref, setActiveDot2, 7)}
+            onScroll={makeScrollHandler(grid2Ref, setActiveDot2, WOMEN_SERVICES.length)}
           >
-            <div className="service-card">
-              <img src={womanShortImg} alt="" className="service-card-bg" />
-              <div className="service-card-content">
-                <h3>Strihanie krátkych vlasov</h3>
-                <p>+ farbenie 28 €</p>
-                <span className="service-price">20 €</span>
+            {WOMEN_SERVICES.map((s) => (
+              <div key={s.title} className="service-card">
+                <img src={s.img} alt="" className="service-card-bg" />
+                <div className="service-card-content">
+                  <h3>{s.title}</h3>
+                  {s.desc && <p>{s.desc}</p>}
+                  <span className="service-price">{s.price}</span>
+                </div>
               </div>
-            </div>
-
-            <div className="service-card">
-              <img src={womanSemiLongImg} alt="" className="service-card-bg" />
-              <div className="service-card-content">
-                <h3>Strihanie polodlhé vlasov</h3>
-                <p>+ farbenie 35 - 45 €</p>
-                <span className="service-price">23 €</span>
-              </div>
-            </div>
-
-            <div className="service-card">
-              <img src={womanLongImg} alt="" className="service-card-bg" />
-              <div className="service-card-content">
-                <h3>Strihanie dlhých vlasov</h3>
-                <p>+ farbenie 60 - 80 €</p>
-                <span className="service-price">25 €</span>
-              </div>
-            </div>
-
-            <div className="service-card">
-              <img src={womanHighShortImg} alt="" className="service-card-bg" />
-              <div className="service-card-content">
-                <h3>Melír krátkych vlasov</h3>
-                <p>Melír dlhých vlasov 60 €</p>
-                <span className="service-price">30 €</span>
-              </div>
-            </div>
-
-            <div className="service-card">
-              <img src={boxingImg} alt="" className="service-card-bg" />
-              <div className="service-card-content">
-                <h3>Boxerské vrkoče</h3>
-                <span className="service-price">20 - 30 €</span>
-              </div>
-            </div>
-
-            <div className="service-card">
-              <img src={womanBasicImg} alt="" className="service-card-bg" />
-              <div className="service-card-content">
-                <h3>Účesy</h3>
-                <span className="service-price">25 - 35 €</span>
-              </div>
-            </div>
-
-            <div className="service-card">
-              <img src={womanDailyImg} alt="" className="service-card-bg" />
-              <div className="service-card-content">
-                <h3>Denná úprava krátke vlasy</h3>
-                <p>Denná úprava polodlhé 20 €</p>
-                <p>Denná úprava dlhé 25 €</p>
-                <span className="service-price">15 €</span>
-              </div>
-            </div>
+            ))}
           </div>
 
           <div className="services-dots">
-            {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+            {WOMEN_SERVICES.map((_, i) => (
               <button
                 key={i}
                 className={`services-dot ${activeDot2 === i ? "services-dot--active" : ""}`}
-                onClick={() => scrollToCard(grid2Ref, i, 7)}
+                onClick={() => scrollToCard(grid2Ref, i, WOMEN_SERVICES.length)}
               />
             ))}
           </div>
