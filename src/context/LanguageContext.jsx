@@ -118,7 +118,8 @@ const translations = {
     validationServiceRequired: "Please select a service",
     validationDateRequired: "Please select a date",
     validationTimeRequired: "Please select a time",
-    validationSlotTaken: "This date and time is already booked. Please choose another slot.",
+    validationSlotTaken:
+      "This date and time is already booked. Please choose another slot.",
     validationNoSunday: "We are closed on Sundays. Please select another day.",
     selectTime: "Select time",
 
@@ -222,10 +223,11 @@ const translations = {
 
     // Contact
     bookAppointment: "Objednať termín",
-    contactSubtitle: "Príďte aj bez objednávky, termíny odporúčame",
+    contactSubtitle:
+      "Po objednaní Vás e-mailom budeme informovať o potvrdení termínu.",
     yourName: "Vaše meno",
     phoneNumber: "Telefónne číslo",
-    emailAddress: "Emailová adresa",
+    emailAddress: "E-mailová adresa",
     selectService: "Vyberte službu",
     additionalNotes: "Ďalšie poznámky alebo špeciálne požiadavky",
     requestAppointment: "Požiadať o termín",
@@ -237,7 +239,7 @@ const translations = {
     validationNameMin: "Meno musí mať aspoň 2 znaky",
     validationPhoneRequired: "Telefónne číslo je povinné",
     validationPhoneInvalid: "Zadajte platné telefónne číslo",
-    validationEmailRequired: "Email je povinný",
+    validationEmailRequired: "E-mail je povinný",
     validationEmailInvalid: "Zadajte platnú emailovú adresu",
     validationServiceRequired: "Vyberte službu",
     validationDateRequired: "Vyberte dátum",
