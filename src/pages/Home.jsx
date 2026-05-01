@@ -41,12 +41,24 @@ const WOMEN_SERVICES = [
   { img: womanDailyImg, title: "Denná úprava krátke vlasy", desc: "Denná úprava polodlhé 20 € / dlhé 25 €", price: "15 €" },
 ];
 
-const TIME_SLOTS = Array.from({ length: 21 }, (_, i) => {
+const MEN_TIME_SLOTS = Array.from({ length: 21 }, (_, i) => {
   const totalMinutes = 8 * 60 + i * 30;
   const h = String(Math.floor(totalMinutes / 60)).padStart(2, "0");
   const m = String(totalMinutes % 60).padStart(2, "0");
   return `${h}:${m}`;
 });
+
+const WOMEN_TIME_SLOTS = Array.from({ length: 11 }, (_, i) => {
+  const h = String(8 + i).padStart(2, "0");
+  return `${h}:00`;
+});
+
+const MEN_SERVICE_KEYS = new Set([
+  "Pánsky strih",
+  "Pánsky strih fade",
+  "Pánsky strih + brada a umývanie",
+  "Detský strih",
+]);
 
 function Home() {
   const { user, isAdmin, loginWithGoogle, logout } = useAuth();
@@ -64,6 +76,11 @@ function Home() {
   } = useForm({ mode: "onTouched" });
 
   const watchedDate = watch("date");
+  const watchedService = watch("service");
+  const isMenService = MEN_SERVICE_KEYS.has(watchedService);
+  const activeTimeSlots = watchedService
+    ? isMenService ? MEN_TIME_SLOTS : WOMEN_TIME_SLOTS
+    : [];
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
@@ -74,6 +91,16 @@ function Home() {
   const [activeDot1, setActiveDot1] = useState(0);
   const [activeDot2, setActiveDot2] = useState(0);
   const [activeDot3, setActiveDot3] = useState(0);
+
+  const today = new Date().toISOString().split("T")[0];
+
+  const isTooSoon = (timeStr) => {
+    if (watchedDate !== today) return false;
+    const [h, m] = timeStr.split(":").map(Number);
+    const slotTime = new Date();
+    slotTime.setHours(h, m, 0, 0);
+    return slotTime.getTime() - Date.now() < 2 * 60 * 60 * 1000;
+  };
 
   const [products, setProducts] = useState([]);
   const [takenSlots, setTakenSlots] = useState([]);
@@ -98,6 +125,11 @@ function Home() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchedDate]);
+
+  useEffect(() => {
+    setValue("time", "");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMenService]);
 
   const makeScrollHandler = (ref, setActive, count) => () => {
     const el = ref.current;
@@ -129,6 +161,11 @@ function Home() {
 
   const onSubmit = async (data) => {
     setSubmitStatus(null);
+
+    if (isTooSoon(data.time)) {
+      setError("time", { message: t("validationTooSoon") });
+      return;
+    }
 
     const taken = await isSlotTaken(data.date, data.time);
     if (taken) {
@@ -643,6 +680,7 @@ function Home() {
                 <div className="form-group">
                   <input
                     type="date"
+                    min={today}
                     className={errors.date ? "input-error" : ""}
                     {...register("date", {
                       required: t("validationDateRequired"),
@@ -662,19 +700,17 @@ function Home() {
                 <div className="form-group">
                   <select
                     className={errors.time ? "input-error" : ""}
-                    disabled={!watchedDate}
+                    disabled={!watchedDate || !watchedService}
                     {...register("time", {
                       required: t("validationTimeRequired"),
                     })}
                   >
                     <option value="">{t("selectTime")}</option>
-                    {TIME_SLOTS.filter(
-                      (slot) => !takenSlots.includes(slot),
-                    ).map((slot) => (
-                      <option key={slot} value={slot}>
-                        {slot}
-                      </option>
-                    ))}
+                    {activeTimeSlots
+                      .filter((slot) => !takenSlots.includes(slot) && !isTooSoon(slot))
+                      .map((slot) => (
+                        <option key={slot} value={slot}>{slot}</option>
+                      ))}
                   </select>
                   {errors.time && (
                     <span className="error-message">{errors.time.message}</span>
